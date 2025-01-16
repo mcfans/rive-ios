@@ -316,6 +316,17 @@ open class RiveView: RiveRendererView {
             return
         }
         
+#if os(iOS) || os(visionOS) || os(tvOS)
+        guard let window else {
+            return
+        }
+        
+        let viewInWindowCoord = self.convert(self.bounds, to: window)
+        if !viewInWindowCoord.intersects(window.bounds) {
+            return
+        }
+#endif
+
         let timestamp = timestamp()
         // last time needs to be set on the first tick
         if lastTime == 0 {
