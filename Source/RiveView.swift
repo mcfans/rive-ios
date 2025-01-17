@@ -169,15 +169,19 @@ open class RiveView: RiveRendererView {
     }
     
     func displayIsMeaningful() -> Bool {
-        guard let window else {
-            return false
-        }
-        
-        let viewInWindowCoord = self.convert(self.bounds, to: window)
-        if !viewInWindowCoord.intersects(window.bounds) {
-            return false
-        }
-        return true
+#if os(iOS) || os(visionOS) || os(tvOS)
+            guard let window else {
+                return false
+            }
+            
+            let viewInWindowCoord = self.convert(self.bounds, to: window)
+            if !viewInWindowCoord.intersects(window.bounds) {
+                return false
+            }
+            return true
+#else
+            return true
+#endif
     }
 
     #if os(iOS) || os(tvOS)
