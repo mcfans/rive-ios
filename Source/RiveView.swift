@@ -153,13 +153,31 @@ open class RiveView: RiveRendererView {
         orientationObserver = nil
         screenObserver = nil
     }
-
+    
+    var delayedNeedsDisplay: Bool = false
+    
     private func needsDisplay() {
         #if os(iOS) || os(visionOS) || os(tvOS)
-            setNeedsDisplay()
+            if displayIsMeaningful() {
+                setNeedsDisplay()
+            } else {
+                delayedNeedsDisplay = true
+            }
         #else
             needsDisplay=true
         #endif
+    }
+    
+    func displayIsMeaningful() -> Bool {
+        guard let window else {
+            return false
+        }
+        
+        let viewInWindowCoord = self.convert(self.bounds, to: window)
+        if !viewInWindowCoord.intersects(window.bounds) {
+            return false
+        }
+        return true
     }
 
     #if os(iOS) || os(tvOS)
@@ -316,16 +334,14 @@ open class RiveView: RiveRendererView {
             return
         }
         
-#if os(iOS) || os(visionOS) || os(tvOS)
-        guard let window else {
+        if delayedNeedsDisplay, displayIsMeaningful() {
+            delayedNeedsDisplay = false
+            needsDisplay()
+            if !isPlaying {
+                stopTimer()
+            }
             return
         }
-        
-        let viewInWindowCoord = self.convert(self.bounds, to: window)
-        if !viewInWindowCoord.intersects(window.bounds) {
-            return
-        }
-#endif
 
         let timestamp = timestamp()
         // last time needs to be set on the first tick
@@ -346,7 +362,9 @@ open class RiveView: RiveRendererView {
         lastTime = timestamp
         advance(delta: elapsedTime)
         if !isPlaying {
-            stopTimer()
+            if !delayedNeedsDisplay {
+                stopTimer()
+            }
         }
     }
     
