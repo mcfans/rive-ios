@@ -208,7 +208,9 @@
     [self setColorPixelFormat:MTLPixelFormatBGRA8Unorm];
     [self setFramebufferOnly:_renderContext.framebufferOnly];
     [self setSampleCount:1];
-    self.presentsWithTransaction = YES;
+#if !TARGET_OS_VISION
+    [self setPresentsWithTransaction: YES];
+#endif
     return self;
 }
 
@@ -247,7 +249,9 @@
     [self setColorPixelFormat:MTLPixelFormatBGRA8Unorm];
     [self setFramebufferOnly:_renderContext.framebufferOnly];
     [self setSampleCount:1];
-    self.presentsWithTransaction = YES;
+#if !TARGET_OS_VISION
+    [self setPresentsWithTransaction: YES];
+#endif
     return value;
 }
 
