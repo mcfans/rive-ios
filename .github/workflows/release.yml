@@ -88,7 +88,7 @@ jobs:
 
       # 新增：上传构建产物作为 artifact
       - name: Upload framework artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: framework
           path: ./archive/RiveRuntime.xcframework.zip
