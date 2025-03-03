@@ -208,6 +208,7 @@
     [self setColorPixelFormat:MTLPixelFormatBGRA8Unorm];
     [self setFramebufferOnly:_renderContext.framebufferOnly];
     [self setSampleCount:1];
+    [self setPresentsWithTransaction: YES];
 
     return self;
 }
@@ -247,6 +248,7 @@
     [self setColorPixelFormat:MTLPixelFormatBGRA8Unorm];
     [self setFramebufferOnly:_renderContext.framebufferOnly];
     [self setSampleCount:1];
+    [self setPresentsWithTransaction: YES];
 
     return value;
 }

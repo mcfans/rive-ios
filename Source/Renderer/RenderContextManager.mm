@@ -2,6 +2,7 @@
  * Copyright 2023 Rive
  */
 
+#import <Metal/MTLDrawable.h>
 #import <RenderContextManager.h>
 #import <RenderContext.h>
 #import <RiveMetalDrawableView.h>
@@ -230,13 +231,15 @@ static std::unique_ptr<rive::gpu::RenderContext> make_pls_context_native(
         .renderTarget = _renderTarget.get(),
         .externalCommandBuffer = (__bridge void*)flushCommandBuffer,
     });
-
-    [flushCommandBuffer presentDrawable:view.currentDrawable];
+    
+    id<MTLDrawable> drawable = view.currentDrawable;
     if (completionHandler)
     {
         [flushCommandBuffer addCompletedHandler:completionHandler];
     }
     [flushCommandBuffer commit];
+    [flushCommandBuffer waitUntilScheduled];
+    [drawable present];
 }
 
 - (void)setMaximum2DTextureSize:(CGSize)maximum2DTextureSize
