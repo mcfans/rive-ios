@@ -280,7 +280,7 @@ open class RiveView: RiveRendererView {
                     self?.tick()
                 },
                 to: .main,
-                forMode: .common
+                forMode: .default
             )
         }
         #if os(iOS) || os(visionOS)
