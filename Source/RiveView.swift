@@ -13,6 +13,16 @@ open class RiveView: RiveRendererView {
         static let layoutScaleFactorAutomatic: Double = -1
     }
 
+    public enum OffscreenBehavior {
+        case playAndDraw
+        case playAndNoDraw
+    }
+
+    public enum DrawOptimization {
+        case alwaysDraw
+        case drawOnChanged
+    }
+
     // MARK: Configuration
     internal weak var riveModel: RiveModel?
     internal var fit: RiveFit = .contain { didSet { needsDisplay() } }
@@ -42,12 +52,30 @@ open class RiveView: RiveRendererView {
     /// - Note: On iOS, this is handled separately from `isExclusiveTouch`.
     internal var forwardsListenerEvents: Bool = false
 
+    /// Sets whether the view should continue drawing while offscreen.
+    public var offscreenBehavior: OffscreenBehavior = .playAndNoDraw
+
+    /// Sets whether the view should always draw, or skip drawing
+    /// if the artboard is unchanged.
+    public var drawOptimization: DrawOptimization = .drawOnChanged
+    private var forceDraw: Bool = false
+
     // MARK: Render Loop
     internal private(set) var isPlaying: Bool = false
     private var lastTime: CFTimeInterval = 0
-    private var displayLinkProxy: DisplayLinkProxy?
+    private var displaySync: RiveDisplayLink?
     private var eventQueue = EventQueue()
-    
+
+    // MARK: FPS
+    private var userFPS: Any?
+    private var userPreferredFramesPerSecond: Int? {
+        return userFPS as? Int
+    }
+    @available(iOS 15, tvOS 15, visionOS 1, *)
+    private var userPreferredFrameRateRange: CAFrameRateRange? {
+        return userFPS as? CAFrameRateRange
+    }
+
     // MARK: Delegates
     @objc public weak var playerDelegate: RivePlayerDelegate?
     public weak var stateMachineDelegate: RiveStateMachineDelegate?
@@ -67,12 +95,19 @@ open class RiveView: RiveRendererView {
 
     open override var frame: CGRect {
         didSet {
+            if oldValue != frame {
+                forceDraw = true
+            }
             redrawIfNecessary()
         }
     }
 
     private var orientationObserver: (any NSObjectProtocol)?
     private var screenObserver: (any NSObjectProtocol)?
+
+    #if !os(macOS)
+    private var touchPool = IDPool<UITouch>(range: 0..<10)
+    #endif
 
     /// Minimalist constructor, call `.configure` to customize the `RiveView` later.
     public init() {
@@ -108,9 +143,11 @@ open class RiveView: RiveRendererView {
         }
 
         if #available(iOS 17, tvOS 17, visionOS 1, *) {
-            registerForTraitChanges([UITraitDisplayScale.self]) { [weak self] (_: UITraitEnvironment, traitCollection: UITraitCollection) in
+            registerForTraitChanges([UITraitDisplayScale.self]) { [weak self] (_: UITraitEnvironment, previousTraitCollection: UITraitCollection) in
                 guard let self else { return }
-                self._layoutScaleFactor = self.traitCollection.displayScale
+                if previousTraitCollection.displayScale != traitCollection.displayScale {
+                    updateLayoutScaleFactor()
+                }
             }
         }
         #endif
@@ -128,8 +165,7 @@ open class RiveView: RiveRendererView {
             forName: NSWindow.didChangeScreenNotification,
             object: nil,
             queue: nil) { [weak self] _ in
-                guard let self, let scale = window?.screen?.backingScaleFactor else { return }
-                _layoutScaleFactor = scale
+                self?.updateLayoutScaleFactor()
             }
         #endif
     }
@@ -156,34 +192,26 @@ open class RiveView: RiveRendererView {
 
     private func needsDisplay() {
         #if os(iOS) || os(visionOS) || os(tvOS)
-            setNeedsDisplay()
+        setNeedsDisplay()
         #else
-            needsDisplay=true
+        needsDisplay = true
         #endif
     }
 
-    #if os(iOS) || os(tvOS)
-    open override func didMoveToWindow() {
-        super.didMoveToWindow()
-        guard let scale = window?.windowScene?.screen.scale else { return }
-        _layoutScaleFactor = scale
-    }
-    #elseif os(visionOS)
-    open override func didMoveToWindow() {
-        super.didMoveToWindow()
-        let scale = traitCollection.displayScale
-        _layoutScaleFactor = scale
-    }
-    #else
+    #if os(macOS)
     open override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        guard let scale = window?.screen?.backingScaleFactor else { return }
-        _layoutScaleFactor = scale
+        updateLayoutScaleFactor()
+    }
+    #else
+    open override func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateLayoutScaleFactor()
     }
     #endif
 
     /// This resets the view with the new model. Useful when the `RiveView` was initialized without one.
-    open func setModel(_ model: RiveModel, autoPlay: Bool = true) throws {
+    @objc open func setModel(_ model: RiveModel, autoPlay: Bool = true) throws {
         stopTimer()
         isPlaying = false
         riveModel = model
@@ -202,27 +230,27 @@ open class RiveView: RiveRendererView {
         
         setFPSCounterVisibility()
     }
-    
-    #if os(iOS) || os(visionOS) || os(tvOS)
+
     /// Hints to underlying CADisplayLink the preferred FPS to run at
     /// - Parameters:
     ///   - preferredFramesPerSecond: Integer number of seconds to set preferred FPS at
+    @objc(setPreferredFPS:)
     open func setPreferredFramesPerSecond(preferredFramesPerSecond: Int) {
-        if let displayLink = displayLinkProxy?.displayLink {
-            displayLink.preferredFramesPerSecond = preferredFramesPerSecond
-        }
+        userFPS = preferredFramesPerSecond
+        displaySync?.set(preferredFramesPerSecond: preferredFramesPerSecond)
     }
     
     /// Hints to underlying CADisplayLink the preferred frame rate range
     /// - Parameters:
     ///   - preferredFrameRateRange: Frame rate range to set
-    @available(iOS 15.0, *)
+    @available(iOS 15, macOS 14, tvOS 15, visionOS 1, *)
+#if !os(macOS) // The automatic Swift bridging header doesn't like bridging CAFrameRateRange automatically
+    @objc(setPreferredFrameRateRange:)
+#endif
     open func setPreferredFrameRateRange(preferredFrameRateRange: CAFrameRateRange) {
-        if let displayLink = displayLinkProxy?.displayLink {
-            displayLink.preferredFrameRateRange = preferredFrameRateRange
-        }
+        userFPS = preferredFrameRateRange
+        displaySync?.set(preferredFrameRateRange: preferredFrameRateRange)
     }
-    #endif
     
     // MARK: - Controls
     
@@ -273,45 +301,49 @@ open class RiveView: RiveRendererView {
     // MARK: - Render Loop
     
     private func startTimer() {
-        
-        if displayLinkProxy == nil {
-            displayLinkProxy = DisplayLinkProxy(
-                handle: { [weak self] in
-                    self?.tick()
-                },
-                to: .main,
-                forMode: .common
-            )
-        }
-        #if os(iOS) || os(visionOS)
-            if displayLinkProxy?.displayLink?.isPaused == true {
-                displayLinkProxy?.displayLink?.isPaused = false
+        #if os(macOS)
+        if #available(macOS 14, *) {
+            guard displaySync == nil else { return }
+            displaySync = RiveCADisplayLink(view: self) { [weak self] in
+                self?.tick()
             }
+        } else {
+            guard displaySync == nil else { return }
+            displaySync = RiveCVDisplaySync { [weak self] in
+                self?.tick()
+            }
+        }
+        #else
+        guard displaySync == nil else { return }
+        displaySync = RiveCADisplayLink(windowScene: window?.windowScene) { [weak self] in
+            self?.tick()
+        }
+        if let fps = userPreferredFramesPerSecond {
+            setPreferredFramesPerSecond(preferredFramesPerSecond: fps)
+        } else if #available(iOS 15, tvOS 15, visionOS 1, *), let range = userPreferredFrameRateRange {
+            setPreferredFrameRateRange(preferredFrameRateRange: range)
+        }
         #endif
+        displaySync?.start()
     }
     
     private func stopTimer() {
-        displayLinkProxy?.invalidate()
-        displayLinkProxy = nil
+        displaySync?.stop()
+        displaySync = nil
         lastTime = 0
         fpsCounter?.stopped()
     }
     
     private func timestamp() -> CFTimeInterval {
-        #if os(iOS) || os(visionOS) || os(tvOS)
-        return displayLinkProxy?.displayLink?.targetTimestamp ?? Date().timeIntervalSince1970
-        #else
-        return Date().timeIntervalSince1970
-        #endif
+        return displaySync?.targetTimestamp ?? Date().timeIntervalSince1970
     }
-        
-    
+
     /// Start a redraw:
     /// - determine the elapsed time
     /// - advance the artbaord, which will invalidate the display.
     /// - if the artboard has come to a stop, stop.
     @objc fileprivate func tick() {
-        guard displayLinkProxy?.displayLink != nil else {
+        guard displaySync != nil else {
             stopTimer()
             return
         }
@@ -365,6 +397,8 @@ open class RiveView: RiveRendererView {
             if let delegate = stateMachineDelegate {
                 stateMachine.stateChanges().forEach { delegate.stateMachine?(stateMachine, didChangeState: $0) }
             }
+
+            stateMachine.viewModelInstance?.updateListeners()
         } else if let animation = riveModel?.animation {
             isPlaying = animation.advance(by: delta) && wasPlaying
 
@@ -416,6 +450,53 @@ open class RiveView: RiveRendererView {
 
     }
 
+    open override func draw(_ rect: CGRect) {
+        // First check whether we should draw and we're on-screen
+        if offscreenBehavior == .playAndDraw || isOnscreen() {
+            // Then check our optimization. Draw if:
+            // 1. We always draw, or
+            // 2. If we don't, if the artboard changed
+            // 3. foceDraw == true; e.g our frame has changed, but we want to maintain the rendering transform
+            guard let artboard = riveModel?.artboard,
+            (drawOptimization == .alwaysDraw || artboard.didChange || forceDraw)
+            else { return }
+
+            super.draw(rect)
+            forceDraw = false
+        }
+    }
+
+    open override func drawableSizeDidChange(_ drawableSize: CGSize) {
+        super.drawableSizeDidChange(drawableSize)
+        if fit == .layout, let artboard = riveModel?.artboard {
+            let currentSize = drawableSize
+            let artboardSize = artboard.bounds().size
+            if currentSize != artboardSize {
+                // We can use currentSize; we are mirroring setting
+                // the updated layout size (if needed) as in drawRive,
+                // which uses the same rect as drawRect (assuming 'self')
+                let scale = layoutScaleFactor == RiveView.Constants.layoutScaleFactorAutomatic ? _layoutScaleFactor : layoutScaleFactor
+                artboard.setWidth(Double(currentSize.width) / scale)
+                artboard.setHeight(Double(currentSize.height) / scale)
+                advance(delta: 0)
+            }
+        }
+    }
+
+    #if canImport(UIKit) || RIVE_MAC_CATALYST
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        drawableSizeDidChange(drawableSize)
+    }
+    #endif
+
+    #if canImport(AppKit) && !RIVE_MAC_CATALYST
+    open override func layout() {
+        super.layout()
+        drawableSizeDidChange(drawableSize)
+    }
+    #endif
+
     // MARK: - UITraitCollection
     #if os(iOS)
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -428,7 +509,7 @@ open class RiveView: RiveRendererView {
             }
 
             if traitCollection.displayScale != previousTraitCollection?.displayScale {
-                _layoutScaleFactor = traitCollection.displayScale
+                updateLayoutScaleFactor()
             }
         }
     }
@@ -437,14 +518,17 @@ open class RiveView: RiveRendererView {
     // MARK: - UIResponder
     #if os(iOS) || os(visionOS) || os(tvOS)
         open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            guard let touch = touches.first else { return }
-            
-            handleTouch(touch, delegate: stateMachineDelegate?.touchBegan) { stateMachine, location in
-                let result = stateMachine.touchBegan(atLocation: location)
-                RiveLogger.log(view: self, event: .touchBegan(location))
+            for touch in touches {
+                guard let id = touchPool.add(touch) else {
+                    return
+                }
+                handleTouch(touch, delegate: stateMachineDelegate?.touchBegan) { stateMachine, location in
+                    let result = stateMachine.touchBegan(atLocation: location, touchID: id)
+                    RiveLogger.log(view: self, event: .touchBegan(location, id))
 
-                if let stateMachine = riveModel?.stateMachine {
-                    stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .began)
+                    if let stateMachine = riveModel?.stateMachine {
+                        stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .began)
+                    }
                 }
             }
 
@@ -454,14 +538,17 @@ open class RiveView: RiveRendererView {
         }
         
         open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-            guard let touch = touches.first else { return }
+            for touch in touches {
+                guard let id = touchPool.add(touch) else {
+                    return
+                }
+                handleTouch(touch, delegate: stateMachineDelegate?.touchMoved) { stateMachine, location in
+                    RiveLogger.log(view: self, event: .touchMoved(location, id))
 
-            handleTouch(touch, delegate: stateMachineDelegate?.touchMoved) { stateMachine, location in
-                RiveLogger.log(view: self, event: .touchMoved(location))
-
-                let result = stateMachine.touchMoved(atLocation: location)
-                if let stateMachine = riveModel?.stateMachine {
-                    stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .moved)
+                    let result = stateMachine.touchMoved(atLocation: location, touchID: id)
+                    if let stateMachine = riveModel?.stateMachine {
+                        stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .moved)
+                    }
                 }
             }
 
@@ -471,14 +558,25 @@ open class RiveView: RiveRendererView {
         }
         
         open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-            guard let touch = touches.first else { return }
+            for touch in touches {
+                guard let id = touchPool.id(for: touch) else {
+                    return
+                }
+                touchPool.remove(touch)
 
-            handleTouch(touch, delegate: stateMachineDelegate?.touchEnded) { stateMachine, location in
-                RiveLogger.log(view: self, event: .touchEnded(location))
+                handleTouch(touch, delegate: stateMachineDelegate?.touchEnded) { stateMachine, location in
+                    RiveLogger.log(view: self, event: .touchEnded(location, id))
 
-                let result = stateMachine.touchEnded(atLocation: location)
-                if let stateMachine = riveModel?.stateMachine {
-                    stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .ended)
+                    var result = stateMachine.touchEnded(atLocation: location, touchID: id)
+                    if let stateMachine = riveModel?.stateMachine {
+                        stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .ended)
+                    }
+
+                    RiveLogger.log(view: self, event: .touchExited(location, id))
+                    result = stateMachine.touchExited(atLocation: location, touchID: id)
+                    if let stateMachine = riveModel?.stateMachine {
+                        stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .exited)
+                    }
                 }
             }
 
@@ -488,14 +586,25 @@ open class RiveView: RiveRendererView {
         }
         
         open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-            guard let touch = touches.first else { return }
+            for touch in touches {
+                guard let id = touchPool.id(for: touch) else {
+                    return
+                }
+                touchPool.remove(touch)
 
-            handleTouch(touch, delegate: stateMachineDelegate?.touchCancelled) { stateMachine, location in
-                RiveLogger.log(view: self, event: .touchCancelled(location))
+                handleTouch(touch, delegate: stateMachineDelegate?.touchCancelled) { stateMachine, location in
+                    RiveLogger.log(view: self, event: .touchCancelled(location, id))
 
-                let result = stateMachine.touchCancelled(atLocation: location)
-                if let stateMachine = riveModel?.stateMachine {
-                    stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .cancelled)
+                    var result = stateMachine.touchCancelled(atLocation: location, touchID: id)
+                    if let stateMachine = riveModel?.stateMachine {
+                        stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .cancelled)
+                    }
+
+                    RiveLogger.log(view: self, event: .touchExited(location, id))
+                    result = stateMachine.touchExited(atLocation: location, touchID: id)
+                    if let stateMachine = riveModel?.stateMachine {
+                        stateMachineDelegate?.stateMachine?(stateMachine, didReceiveHitResult: result, from: .exited)
+                    }
                 }
             }
 
@@ -537,7 +646,7 @@ open class RiveView: RiveRendererView {
     #else
         open override func mouseDown(with event: NSEvent) {
             handleTouch(event, delegate: stateMachineDelegate?.touchBegan) { stateMachine, location in
-                RiveLogger.log(view: self, event: .touchBegan(location))
+                RiveLogger.log(view: self, event: .touchBegan(location, 0))
 
                 let result = stateMachine.touchBegan(atLocation: location)
                 if let stateMachine = riveModel?.stateMachine {
@@ -552,7 +661,7 @@ open class RiveView: RiveRendererView {
         
         open override func mouseMoved(with event: NSEvent) {
             handleTouch(event, delegate: stateMachineDelegate?.touchMoved) { stateMachine, location in
-                RiveLogger.log(view: self, event: .touchMoved(location))
+                RiveLogger.log(view: self, event: .touchMoved(location, 0))
 
                 let result = stateMachine.touchMoved(atLocation: location)
                 if let stateMachine = riveModel?.stateMachine {
@@ -567,7 +676,7 @@ open class RiveView: RiveRendererView {
         
         open override func mouseDragged(with event: NSEvent) {
             handleTouch(event, delegate: stateMachineDelegate?.touchMoved) { stateMachine, location in
-                RiveLogger.log(view: self, event: .touchMoved(location))
+                RiveLogger.log(view: self, event: .touchMoved(location, 0))
 
                 let result = stateMachine.touchMoved(atLocation: location)
                 if let stateMachine = riveModel?.stateMachine {
@@ -582,7 +691,7 @@ open class RiveView: RiveRendererView {
         
         open override func mouseUp(with event: NSEvent) {
             handleTouch(event, delegate: stateMachineDelegate?.touchEnded) { stateMachine, location in
-                RiveLogger.log(view: self, event: .touchEnded(location))
+                RiveLogger.log(view: self, event: .touchEnded(location, 0))
 
                 let result = stateMachine.touchEnded(atLocation: location)
                 if let stateMachine = riveModel?.stateMachine {
@@ -597,7 +706,7 @@ open class RiveView: RiveRendererView {
         
         open override func mouseExited(with event: NSEvent) {
             handleTouch(event, delegate: stateMachineDelegate?.touchCancelled) { stateMachine, location in
-                RiveLogger.log(view: self, event: .touchCancelled(location))
+                RiveLogger.log(view: self, event: .touchCancelled(location, 0))
 
                 let result = stateMachine.touchCancelled(atLocation: location)
                 if let stateMachine = riveModel?.stateMachine {
@@ -672,10 +781,27 @@ open class RiveView: RiveRendererView {
         }
     }
 
+    // MARK: - Private
+
     private func redrawIfNecessary() {
         if isPlaying == false {
             needsDisplay()
         }
+    }
+
+    private func updateLayoutScaleFactor() {
+        #if os(macOS)
+        guard let scale = window?.screen?.backingScaleFactor else { return }
+        _layoutScaleFactor = scale
+        #elseif os(visionOS)
+        _layoutScaleFactor = traitCollection.displayScale
+        #else
+        guard let nativeScale = window?.screen.nativeScale else {
+            _layoutScaleFactor = traitCollection.displayScale
+            return
+        }
+        _layoutScaleFactor = nativeScale
+        #endif
     }
 }
 
@@ -689,6 +815,9 @@ open class RiveView: RiveRendererView {
     case ended
     /// The touch event that occurs when a touch or mouse click is cancelled.
     case cancelled
+    /// The touch event that occurs when a touch exits the artboard; specifically used when multitouch is enabled
+    /// This event is triggered when a touch leaves the artboard area during multitouch interactions
+    case exited
 }
 
 @objc public protocol RiveStateMachineDelegate: AnyObject {
@@ -696,7 +825,11 @@ open class RiveView: RiveRendererView {
     @objc optional func touchMoved(onArtboard artboard: RiveArtboard?, atLocation location: CGPoint)
     @objc optional func touchEnded(onArtboard artboard: RiveArtboard?, atLocation location: CGPoint)
     @objc optional func touchCancelled(onArtboard artboard: RiveArtboard?, atLocation location: CGPoint)
-    
+    /// Called when a touch exits the artboard, typically used for multitouch scenarios
+    /// @param artboard The artboard where the touch exited
+    /// @param location The location where the touch exited in artboard coordinates
+    @objc optional func touchExited(onArtboard artboard: RiveArtboard?, atLocation location: CGPoint)
+
     @objc optional func stateMachine(_ stateMachine: RiveStateMachineInstance, receivedInput input: StateMachineInput)
     @objc optional func stateMachine(_ stateMachine: RiveStateMachineInstance, didChangeState stateName: String)
     @objc optional func stateMachine(_ stateMachine: RiveStateMachineInstance, didReceiveHitResult hitResult: RiveHitResult, from event: RiveTouchEvent)
@@ -710,60 +843,6 @@ open class RiveView: RiveRendererView {
     func player(stoppedWithModel riveModel: RiveModel?)
     func player(didAdvanceby seconds: Double, riveModel: RiveModel?)
 }
-
-#if os(iOS) || os(visionOS) || os(tvOS)
-    fileprivate class DisplayLinkProxy {
-        var displayLink: CADisplayLink?
-        var handle: (() -> Void)?
-        private var runloop: RunLoop
-        private var mode: RunLoop.Mode
-
-        init(handle: (() -> Void)?, to runloop: RunLoop, forMode mode: RunLoop.Mode) {
-            self.handle = handle
-            self.runloop = runloop
-            self.mode = mode
-            displayLink = CADisplayLink(target: self, selector: #selector(updateHandle))
-            displayLink?.add(to: runloop, forMode: mode)
-        }
-
-        @objc func updateHandle() {
-            handle?()
-        }
-
-        func invalidate() {
-            displayLink?.remove(from: runloop, forMode: mode)
-            displayLink?.invalidate()
-            displayLink = nil
-        }
-    }
-#else
-    fileprivate class DisplayLinkProxy {
-        var displayLink: CVDisplayLink?
-        
-        init?(handle: (() -> Void)!, to runloop: RunLoop, forMode mode: RunLoop.Mode) {
-            //ignore runloop/formode
-            let error = CVDisplayLinkCreateWithActiveCGDisplays(&displayLink)
-            if error != kCVReturnSuccess { return nil }
-            
-            CVDisplayLinkSetOutputHandler(displayLink!) { dl, ts, tsDisplay, _, _ in
-                DispatchQueue.main.async {
-                    handle()
-                }
-                return kCVReturnSuccess
-            }
-            
-            CVDisplayLinkStart(displayLink!)
-        }
-
-        func invalidate() {
-            
-            if let displayLink = displayLink {
-                CVDisplayLinkStop(displayLink)
-                self.displayLink = nil
-            }
-        }
-    }
-#endif
 
 /// Tracks a queue of events that haven't been fired yet. We do this so that we're not calling delegates and modifying state
 /// while a view is updating (e.g. being initialized, as we autoplay and fire play events during the view's init otherwise

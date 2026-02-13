@@ -22,7 +22,7 @@ Next, check out this repository, making sure to use ssh, and making sure to incl
 git clone --recurse-submodules git@github.com:rive-app/rive-ios.git
 ```
 
-This runtime relies on our open-source [Rive runtime](https://github.com/rive-app/rive-runtime) in order to be built. This dependency will automatically be included if you clone this repository with `--recurse-submobules`. If you have already cloned the directory without submodules, you can update the submodules by performing the following from the **root** of your cloned repository:
+This runtime relies on our open-source [Rive runtime](https://github.com/rive-app/rive-runtime) in order to be built. This dependency will automatically be included if you clone this repository with `--recurse-submodules`. If you have already cloned the directory without submodules, you can update the submodules by performing the following from the **root** of your cloned repository:
 
 ```bash
 cd submodules
@@ -32,10 +32,25 @@ git submodule update --init --recursive
 Once you have cloned the repository, the prerequisites are installed, and your Xcode active developer directory is properly set, you can build this runtime by running the following from the **root** of your cloned repository:
 
 ```bash
-$ ./scripts/build.sh all
+$ PATH=./submodules/rive-runtime/:$PATH ./scripts/build.sh all release
 ```
 
+Note: `PATH` must be updated for the Apple runtime build scripts to find `build_rive.sh`. The above command will temporarily set `PATH` to include the appropriate directory while the script is running.
+
 If the script completes successfully, then all necessary frameworks are built, and you can continue on to running the Example apps.
+
+### Building lite variations
+
+When manually building the Apple runtime, you can choose to build with all Rive features, or without certain features, such as audio or text. To build a lite version of the Apple runtime, run the same build script as shown above, supplying additional flags as needed:
+
+- `--no-audio` will build all libraries without audio support
+- `--no-text` will build all libraries without text support
+
+After running `build.sh` to build the framework dependencies, run the following script to build the final `.xcframework`:
+
+`./scripts/build_framework.sh -c Release`
+
+Running this script expects `build.sh` to be run and the resulting changes to `Base.xcconfig` to not be modified. Otherwise, the runtime will fail to successfully compile.
 
 ## Example and Preview targets / schemes
 
@@ -50,7 +65,7 @@ After releasing a new runtime version you'll need to manually update the `rive-i
 If you are contributing and you have access to Rives' AWS environment, make you sure install `aws-cli` and configure it with your credentials. If you run into permission issues here `aws sts get-caller-identity` can help make sure that your local developer environment is setup to talk to AWS correctly.
 See https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
-Note: on a Mac with brew, you can simply run 'brew install awscli'
+Note: on a Mac with brew, you can simply run 'brew install awscli'.
 
 Note: the 'dependencies' directory is just a cache of what the configure.sh script downloads. It can be removed if you suspect it is out of date, and then just rerun the script (./scripts/configure.sh)
 

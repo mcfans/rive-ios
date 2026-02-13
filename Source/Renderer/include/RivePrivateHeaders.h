@@ -33,15 +33,24 @@
 #import "rive/assets/audio_asset.hpp"
 #import "rive/assets/file_asset.hpp"
 #import "rive/file_asset_loader.hpp"
+#import "rive/bindable_artboard.hpp"
+#import "rive/viewmodel/runtime/viewmodel_instance_runtime.hpp"
+#import "rive/viewmodel/runtime/viewmodel_runtime.hpp"
 
 #include "rive/open_url_event.hpp"
 #include "rive/custom_property_boolean.hpp"
 #include "rive/custom_property_string.hpp"
 #include "rive/custom_property_number.hpp"
 
+#include "rive/command_server.hpp"
+#include "rive/command_queue.hpp"
+#include "rive/factory.hpp"
+
 // MARK: - Feature Flags
 
 #define RIVE_ENABLE_REFERENCE_COUNTING false
+
+NS_ASSUME_NONNULL_BEGIN
 
 // MARK: - Public Interfaces
 
@@ -153,6 +162,7 @@
  * RiveFileAsset
  */
 @interface RiveFactory ()
+@property(nonatomic, readonly) rive::Factory* factory;
 - (instancetype)initWithFactory:(rive::Factory*)factory;
 @end
 
@@ -170,3 +180,81 @@
 - (instancetype)initWithAudio:(rive::rcp<rive::AudioSource>)audio;
 - (rive::rcp<rive::AudioSource>)instance;
 @end
+
+@interface RiveDataBindingViewModel ()
+- (instancetype)initWithViewModel:(rive::ViewModelRuntime*)viewModel;
+@end
+
+@protocol RiveDataBindingViewModelInstancePropertyDelegate
+- (void)valuePropertyDidAddListener:
+    (RiveDataBindingViewModelInstanceProperty*)value;
+- (void)valuePropertyDidRemoveListener:
+            (RiveDataBindingViewModelInstanceProperty*)listener
+                               isEmpty:(BOOL)isEmpty;
+@end
+
+@interface RiveDataBindingViewModelInstance ()
+@property(nonatomic, readonly) rive::ViewModelInstanceRuntime* instance;
+- (instancetype)initWithInstance:
+    (rive::rcp<rive::ViewModelInstanceRuntime>)instance;
+- (void)cacheProperty:(RiveDataBindingViewModelInstanceProperty*)value
+             withPath:(NSString*)path;
+@end
+
+@interface RiveDataBindingViewModelInstanceProperty ()
+@property(nonatomic, weak) id<RiveDataBindingViewModelInstancePropertyDelegate>
+    valueDelegate;
+@property(nonatomic, readonly) NSDictionary<NSUUID*, id>* listeners;
+- (instancetype)initWithValue:(rive::ViewModelInstanceValueRuntime*)value;
+- (NSUUID*)addListener:(id)listener;
+- (void)removeListener:(NSUUID*)listener;
+- (void)handleListeners;
+@end
+
+@interface RiveDataBindingViewModelInstanceStringProperty ()
+- (instancetype)initWithString:(rive::ViewModelInstanceStringRuntime*)string;
+@end
+
+@interface RiveDataBindingViewModelInstanceNumberProperty ()
+- (instancetype)initWithNumber:(rive::ViewModelInstanceNumberRuntime*)number;
+@end
+
+@interface RiveDataBindingViewModelInstanceBooleanProperty ()
+- (instancetype)initWithBoolean:(rive::ViewModelInstanceBooleanRuntime*)boolean;
+@end
+
+@interface RiveDataBindingViewModelInstanceColorProperty ()
+- (instancetype)initWithColor:(rive::ViewModelInstanceColorRuntime*)color;
+@end
+
+@interface RiveDataBindingViewModelInstanceEnumProperty ()
+- (instancetype)initWithEnum:(rive::ViewModelInstanceEnumRuntime*)e;
+@end
+
+@interface RiveDataBindingViewModelInstanceTriggerProperty ()
+- (instancetype)initWithTrigger:(rive::ViewModelInstanceTriggerRuntime*)trigger;
+@end
+
+@interface RiveDataBindingViewModelInstancePropertyData ()
+- (instancetype)initWithData:(rive::PropertyData)data;
+@end
+
+@interface RiveDataBindingViewModelInstanceImageProperty ()
+- (instancetype)initWithImage:(rive::ViewModelInstanceAssetImageRuntime*)image;
+@end
+
+@interface RiveDataBindingViewModelInstanceListProperty ()
+- (instancetype)initWithList:(rive::ViewModelInstanceListRuntime*)list;
+@end
+
+@interface RiveDataBindingViewModelInstanceArtboardProperty ()
+- (instancetype)initWithArtboard:(rive::ViewModelInstanceArtboardRuntime*)list;
+@end
+
+@interface RiveBindableArtboard ()
+- (rive::rcp<rive::BindableArtboard>)bindableArtboard;
+- (instancetype)initWithBindableArtboard:
+    (rive::rcp<rive::BindableArtboard>)bindableArtboard;
+@end
+
+NS_ASSUME_NONNULL_END

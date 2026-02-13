@@ -10,13 +10,18 @@
 #import <RivePrivateHeaders.h>
 #import <RiveFactory.h>
 #import <RiveRuntime/RiveRuntime-Swift.h>
+#import <RenderContext.h>
+
+#ifdef WITH_RIVE_TEXT
 #import <CoreText/CTFont.h>
 #import <rive/text/font_hb.hpp>
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIFont.h>
 #endif
+#endif
 
+#ifdef WITH_RIVE_TEXT
 static rive::rcp<rive::Font> riveFontFromNativeFont(id font,
                                                     bool useSystemShaper)
 {
@@ -35,12 +40,14 @@ static rive::rcp<rive::Font> riveFontFromNativeFont(id font,
     CTFontRef ctFont = (__bridge CTFontRef)font;
     return HBFont::FromSystem((void*)ctFont, useSystemShaper, weight, width);
 }
+#endif
 
 @implementation RiveRenderImage
 {
     rive::rcp<rive::RenderImage>
         instance; // note: we do NOT own this, so don't delete it
 }
+
 - (instancetype)initWithImage:(rive::rcp<rive::RenderImage>)image
 {
     if (self = [super init])
@@ -53,6 +60,21 @@ static rive::rcp<rive::Font> riveFontFromNativeFont(id font,
         return nil;
     }
 }
+
+- (instancetype)initWithData:(NSData*)data
+{
+    RenderContext* context = [[RenderContextManager shared] newDefaultContext];
+    RiveFactory* factory =
+        [[RiveFactory alloc] initWithFactory:[context factory]];
+    auto renderImage = [factory decodeImage:data];
+    auto image = [renderImage instance];
+    if (image == nullptr || image.get() == nullptr)
+    {
+        return nil;
+    }
+    return [[RiveRenderImage alloc] initWithImage:image];
+}
+
 - (rive::rcp<rive::RenderImage>)instance
 {
     return instance;
@@ -125,21 +147,40 @@ static rive::rcp<rive::Font> riveFontFromNativeFont(id font,
 #if TARGET_OS_IPHONE
 - (RiveFont*)decodeUIFont:(UIFont*)font
 {
+#ifdef WITH_RIVE_TEXT
     return [[RiveFont alloc] initWithFont:riveFontFromNativeFont(font, true)];
+#else
+    return nil;
+#endif
 }
 #else
 - (RiveFont*)decodeNSFont:(NSFont*)font
 {
+#ifdef WITH_RIVE_TEXT
     return [[RiveFont alloc] initWithFont:riveFontFromNativeFont(font, true)];
+#else
+    return nil;
+#endif
 }
 #endif
 
 - (RiveAudio*)decodeAudio:(nonnull NSData*)data
 {
+#ifdef WITH_RIVE_AUDIO
     UInt8* bytes = (UInt8*)[data bytes];
     return [[RiveAudio alloc]
         initWithAudio:instance->decodeAudio(
                           rive::Span<const uint8_t>(bytes, [data length]))];
+#else
+    return nil;
+#endif
+}
+
+#pragma mark Private
+
+- (rive::Factory*)factory
+{
+    return instance;
 }
 
 @end

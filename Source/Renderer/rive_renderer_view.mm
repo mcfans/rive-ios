@@ -14,8 +14,10 @@
 #import <RenderContextManager.h>
 // We manually need to provide this as our build-time config isn't shared with
 // xcode.
-#define WITH_RIVE_AUDIO
+
+#ifdef WITH_RIVE_AUDIO
 #include "rive/audio/audio_engine.hpp"
+#endif
 
 #if TARGET_OS_VISION
 @implementation RiveMTKView
@@ -108,6 +110,7 @@
     newSize.width *= self.traitCollection.displayScale;
     newSize.height *= self.traitCollection.displayScale;
     self.drawableSize = newSize;
+    [self drawableSizeDidChange:newSize];
 }
 
 - (void)setContentScaleFactor:(CGFloat)contentScaleFactor
@@ -143,9 +146,19 @@
     [self drawRect:self.bounds];
 }
 
+- (void)drawableSizeDidChange:(CGSize)drawableSize
+{}
+
 @end
 #else
 @implementation RiveMTKView
+- (void)setDrawableSize:(CGSize)drawableSize
+{
+    [super setDrawableSize:drawableSize];
+    [self drawableSizeDidChange:drawableSize];
+}
+- (void)drawableSizeDidChange:(CGSize)drawableSize
+{}
 @end
 #endif
 
@@ -157,20 +170,24 @@
 
 - (void)didEnterBackground:(NSNotification*)notification
 {
+#ifdef WITH_RIVE_AUDIO
     auto engine = rive::AudioEngine::RuntimeEngine(false);
     if (engine != nil)
     {
         engine->stop();
     }
+#endif
 }
 
 - (void)didEnterForeground:(NSNotification*)notification
 {
+#ifdef WITH_RIVE_AUDIO
     auto engine = rive::AudioEngine::RuntimeEngine(false);
     if (engine != nil)
     {
         engine->start();
     }
+#endif
 }
 
 - (instancetype)initWithCoder:(NSCoder*)decoder
@@ -200,7 +217,7 @@
 #endif
     self = [super initWithCoder:decoder];
 
-    _renderContext = [[RenderContextManager shared] getDefaultContext];
+    _renderContext = [[RenderContextManager shared] newDefaultContext];
     assert(_renderContext);
     self.device = [_renderContext metalDevice];
 
@@ -239,7 +256,7 @@
                name:NSApplicationWillBecomeActiveNotification
              object:nil];
 #endif
-    _renderContext = [[RenderContextManager shared] getDefaultContext];
+    _renderContext = [[RenderContextManager shared] newDefaultContext];
     assert(_renderContext);
 
     auto value = [super initWithFrame:frameRect
@@ -353,7 +370,7 @@
         return;
     }
 
-    if (![[self currentDrawable] texture])
+    if (!self.currentDrawable.texture)
     {
         return;
     }
@@ -378,7 +395,10 @@
 {
     [super drawRect:rect];
 
-    [self drawInRect:rect withCompletion:NULL];
+    @autoreleasepool
+    {
+        [self drawInRect:rect withCompletion:NULL];
+    }
 }
 
 - (rive::Fit)riveFit:(RiveFit)fit

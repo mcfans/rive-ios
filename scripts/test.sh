@@ -5,7 +5,7 @@ test_ios_simulator() {
     # Test RiveRuntime on a iOS simulator
     xcodebuild -workspace Rive.xcworkspace \
         -scheme RiveRuntime \
-        -destination platform=iOS\ Simulator,name=iPhone\ 15 \
+        -destination platform=iOS\ Simulator,name=iPhone\ 16 \
         clean test | xcpretty
 }
 
@@ -27,8 +27,17 @@ test_tvos_simulator() {
         clean test | xcpretty
 }
 
+test_maccatalyst() {
+    echo "=== Running tests on Mac Catalyst ==="
+    # Test RiveRuntime on Mac Catalyst
+    xcodebuild -workspace Rive.xcworkspace \
+        -scheme "RiveRuntime (Catalyst)" \
+        -destination "platform=macOS,variant=Mac Catalyst" \
+        clean test | xcpretty
+}
+
 usage() {
-    echo "USAGE: $0 ios_sim|xrsimulator|appletvsimulator"
+    echo "USAGE: $0 ios_sim|xrsimulator|appletvsimulator|maccatalyst"
     exit 1
 }
 
@@ -45,6 +54,9 @@ xrsimulator)
     ;;
 appletvsimulator)
     test_tvos_simulator
+    ;;
+maccatalyst)
+    test_maccatalyst
     ;;
 *)
     usage
