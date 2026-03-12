@@ -104,7 +104,9 @@
 
 - (void)font:(RiveFont*)font
 {
+#ifdef WITH_RIVE_TEXT
     ((rive::FontAsset*)[self getInstance])->font([font instance]);
+#endif
 }
 @end
 
@@ -116,6 +118,8 @@
 
 - (void)audio:(RiveAudio*)audio
 {
+#ifdef WITH_RIVE_AUDIO
     ((rive::AudioAsset*)[self getInstance])->audioSource([audio instance]);
+#endif
 }
 @end

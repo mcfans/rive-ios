@@ -14,6 +14,7 @@
 
 #import <RiveRuntime/RiveFile.h>
 #import <RiveRuntime/RiveArtboard.h>
+#import <RiveRuntime/RiveBindableArtboard.h>
 #import <RiveRuntime/RiveSMIInput.h>
 #import <RiveRuntime/RiveLinearAnimationInstance.h>
 #import <RiveRuntime/RiveStateMachineInstance.h>
@@ -27,6 +28,13 @@
 #import <RiveRuntime/RiveFileAssetLoader.h>
 #import <RiveRuntime/CDNFileAssetLoader.h>
 #import <RiveRuntime/RiveFont.h>
+
+#import <RiveRuntime/RiveDataBindingViewModel.h>
+#import <RiveRuntime/RiveDataBindingViewModelInstance.h>
+#import <RiveRuntime/RiveDataBindingViewModelInstanceProperty.h>
+#import <RiveRuntime/RiveDataBindingViewModelInstancePropertyData.h>
+
+#import <RiveRuntime/RiveExperimental.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

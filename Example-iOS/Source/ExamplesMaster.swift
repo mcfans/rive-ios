@@ -31,6 +31,9 @@ class ExamplesMasterTableViewController: UITableViewController {
     // MARK: SwiftUI View Examples
     /// Made from custom `Views`
     private lazy var swiftViews: [(String, AnyView)] = [
+        ("Data Binding",        typeErased(dismissableView: DataBindingView())),
+        ("Data Binding (Rewards)",        typeErased(dismissableView: RewardsView())),
+        ("Blinko", typeErased(dismissableView: BlinkoView())),
         ("Touch Events!",       typeErased(dismissableView: SwiftTouchEvents())),
         ("Widget Collection",   typeErased(dismissableView: SwiftWidgets())),
         ("Animation Player",    typeErased(dismissableView: SwiftSimpleAnimation())),
@@ -56,6 +59,13 @@ class ExamplesMasterTableViewController: UITableViewController {
        ("Clock",   ClockViewModel()),
        ("Slider",  RiveSlider())
     ]
+
+    private let experimental: [(String, AnyView)] = [
+        ("Simple - Marty", AnyView(MartyView())),
+        ("Quick Start - Data Binding", AnyView(QuickStartView())),
+        ("Animation Player", AnyView(PlayerView())),
+        ("Shared Worker", AnyView(SharedWorkerView()))
+    ]
 }
 
 extension ExamplesMasterTableViewController {
@@ -76,7 +86,11 @@ extension ExamplesMasterTableViewController {
         else if indexPath.section == 2 {
             cell.textLabel?.text = viewModels[indexPath.row].0
         }
-        
+
+        else if indexPath.section == 3 {
+            cell.textLabel?.text = experimental[indexPath.row].0
+        }
+
         return cell
     }
     
@@ -98,7 +112,11 @@ extension ExamplesMasterTableViewController {
             let anyView = viewModels[indexPath.row].1.view()
             controller = UIHostingController(rootView: anyView)
         }
-        
+
+        else if indexPath.section == 3 {
+            controller = UIHostingController(rootView: experimental[indexPath.row].1)
+        }
+
         // Too many sections
         else { fatalError() }
         
@@ -110,6 +128,7 @@ extension ExamplesMasterTableViewController {
         case 0: return "Storyboard Examples"
         case 1: return "SwiftUI Examples"
         case 2: return "ViewModel Examples"
+        case 3: return "Experimental"
         default: fatalError()
         }
     }
@@ -119,12 +138,13 @@ extension ExamplesMasterTableViewController {
         case 0: return storyboardIDs.count
         case 1: return swiftViews.count
         case 2: return viewModels.count
+        case 3: return experimental.count
         default: fatalError()
         }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
     
     override func viewDidLoad() {

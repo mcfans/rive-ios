@@ -22,6 +22,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RiveRenderImage : NSObject
+- (nullable instancetype)initWithData:(NSData*)data;
 @end
 
 @interface RiveAudio : NSObject
@@ -33,12 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RiveFactory : NSObject
 - (RiveFont*)decodeFont:(NSData*)data;
 #if TARGET_OS_IPHONE || TARGET_OS_VISION || TARGET_OS_TV
-- (RiveFont*)decodeUIFont:(UIFont*)data NS_SWIFT_NAME(decodeFont(_:));
+- (nullable RiveFont*)decodeUIFont:(UIFont*)data NS_SWIFT_NAME(decodeFont(_:));
 #else
-- (RiveFont*)decodeNSFont:(NSFont*)data NS_SWIFT_NAME(decodeFont(_:));
+- (nullable RiveFont*)decodeNSFont:(NSFont*)data NS_SWIFT_NAME(decodeFont(_:));
 #endif
 - (RiveRenderImage*)decodeImage:(NSData*)data;
-- (RiveAudio*)decodeAudio:(NSData*)data;
+- (nullable RiveAudio*)decodeAudio:(NSData*)data;
 @end
 
 NS_ASSUME_NONNULL_END
