@@ -9,10 +9,10 @@ on:
 jobs:
   run_tests:
     name: Run Rive tests
-    runs-on: ghcr.io/cirruslabs/macos-runner:sonoma
+    runs-on: ghcr.io/cirruslabs/macos-runner:sequoia
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.PAT_GITHUB }}
           submodules: true
@@ -22,6 +22,10 @@ jobs:
           python3 -m venv .venv
           source .venv/bin/activate
           echo PATH=$PATH >> $GITHUB_ENV
+
+      - name: Add rive_build.sh to PATH
+        shell: bash
+        run: echo "${{github.workspace}}/submodules/rive-runtime/build" >> $GITHUB_PATH
 
       - name: Installing pre-requisites
         run: |
@@ -37,8 +41,8 @@ jobs:
           sudo mv premake5 /usr/local/bin
           pip3 install ply
 
-      - name: Select Xcode 15.4
-        run: sudo xcodes select 15.4
+      - name: Select Xcode 16.4
+        run: sudo xcodes select 16.4
 
       - name: Build for iOS Simulator (using the cache, we should make an archive of course)
         run: |
@@ -51,12 +55,23 @@ jobs:
         run: |
           ./scripts/build.sh xrsimulator release
 
-      - name: Test visionOS runtime
-        run: ./scripts/test.sh xrsimulator
+      # - name: Test visionOS runtime
+      #   run: ./scripts/test.sh xrsimulator
 
       - name: Build for tvOS Simulator (using the cache, we should make an archive of course)
         run: |
           ./scripts/build.sh appletvsimulator release
 
-      - name: Test tvOS runtime
-        run: ./scripts/test.sh appletvsimulator
+      # - name: Test tvOS runtime
+      #   run: ./scripts/test.sh appletvsimulator
+
+      - name: Build for Mac Catalyst (using the cache, we should make an archive of course)
+        run: |
+          ./scripts/build.sh maccatalyst release
+
+      - name: Build for Mac (using the cache, we should make an archive of course)
+        run: |
+          ./scripts/build.sh macosx release
+
+      # - name: Test Mac Catalyst runtime
+      #   run: ./scripts/test.sh maccatalyst

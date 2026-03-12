@@ -21,8 +21,9 @@
  */
 @implementation RiveFile
 {
-    std::unique_ptr<rive::File> riveFile;
-    rive::FileAssetLoader* fileAssetLoader;
+    rive::rcp<rive::File> riveFile;
+    rive::rcp<rive::FileAssetLoader> fileAssetLoader;
+    RenderContext* _renderContext;
 }
 
 + (uint)majorVersion
@@ -291,7 +292,15 @@
                     self.isLoaded = true;
                     [RiveLogger logLoadedFromURL:URL];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                      if ([[NSThread currentThread] isMainThread])
+                      if (error)
+                      {
+                          if ([self.delegate respondsToSelector:@selector
+                                             (riveFileDidError:)])
+                          {
+                              [self.delegate riveFileDidError:error];
+                          }
+                      }
+                      else
                       {
                           if ([self.delegate respondsToSelector:@selector
                                              (riveFileDidLoad:error:)])
@@ -309,6 +318,13 @@
                                          URL.absoluteString,
                                          error.localizedDescription];
                     [RiveLogger logFile:nil error:message];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                      if ([self.delegate
+                              respondsToSelector:@selector(riveFileDidError:)])
+                      {
+                          [self.delegate riveFileDidError:error];
+                      }
+                    });
                 }
               }];
 
@@ -341,10 +357,9 @@
                 error:(NSError**)error
 {
     rive::ImportResult result;
-    RenderContext* renderContext =
-        [[RenderContextManager shared] getDefaultContext];
-    assert(renderContext);
-    rive::Factory* factory = [renderContext factory];
+    _renderContext = [[RenderContextManager shared] newDefaultContext];
+    assert(_renderContext);
+    rive::Factory* factory = [_renderContext factory];
 
     FallbackFileAssetLoader* fallbackLoader =
         [[FallbackFileAssetLoader alloc] init];
@@ -359,13 +374,14 @@
         [fallbackLoader addLoader:cdnLoader];
     }
 
-    fileAssetLoader = new rive::FileAssetLoaderAdapter(fallbackLoader);
+    fileAssetLoader =
+        rive::make_rcp<rive::FileAssetLoaderAdapter>(fallbackLoader);
 
     auto file = rive::File::import(
-        rive::Span(bytes, length), factory, &result, fileAssetLoader);
+        rive::Span(bytes, length), factory, &result, fileAssetLoader.get());
     if (result == rive::ImportResult::success)
     {
-        riveFile = std::move(file);
+        riveFile = file;
         return true;
     }
 
@@ -494,11 +510,98 @@
     return artboardNames;
 }
 
+#pragma mark - Data Binding
+
+- (NSUInteger)viewModelCount
+{
+    return riveFile->viewModelCount();
+}
+
+- (nullable id)viewModelAtIndex:(NSUInteger)index
+{
+    auto viewModel = riveFile->viewModelByIndex(index);
+    if (viewModel == nullptr)
+    {
+        [RiveLogger logFileViewModelAtIndex:index found:NO];
+        return nil;
+    }
+    [RiveLogger logFileViewModelAtIndex:index found:YES];
+    return [[RiveDataBindingViewModel alloc] initWithViewModel:viewModel];
+}
+
+- (nullable id)viewModelNamed:(NSString*)name
+{
+    auto viewModel = riveFile->viewModelByName(std::string([name UTF8String]));
+    if (viewModel == nullptr)
+    {
+        [RiveLogger logFileViewModelWithName:name found:NO];
+        return nil;
+    }
+    [RiveLogger logFileViewModelWithName:name found:YES];
+    return [[RiveDataBindingViewModel alloc] initWithViewModel:viewModel];
+}
+
+- (RiveDataBindingViewModel*)defaultViewModelForArtboard:(RiveArtboard*)artboard
+{
+    auto viewModel =
+        riveFile->defaultArtboardViewModel(artboard.artboardInstance);
+    if (viewModel == nullptr)
+    {
+        [RiveLogger logFileDefaultViewModelForArtboard:artboard found:NO];
+        return nil;
+    }
+    [RiveLogger logFileDefaultViewModelForArtboard:artboard found:YES];
+    return [[RiveDataBindingViewModel alloc] initWithViewModel:viewModel];
+}
+
+- (RiveBindableArtboard*)
+    bindableArtboardWithName:(NSString*)name
+                       error:(NSError* __autoreleasing _Nullable*)error
+{
+    std::string stdName = std::string([name UTF8String]);
+    auto bindableArtboard = riveFile->bindableArtboardNamed(stdName);
+    if (bindableArtboard == nullptr)
+    {
+        NSString* message = [NSString
+            stringWithFormat:@"No Bindable Artboard Found with name %@.", name];
+        [RiveLogger logFile:nil error:message];
+        *error = [NSError errorWithDomain:RiveErrorDomain
+                                     code:RiveNoArtboardFound
+                                 userInfo:@{
+                                     NSLocalizedDescriptionKey : message,
+                                     @"name" : @"NoArtboardFound"
+                                 }];
+        return nil;
+    }
+    return [[RiveBindableArtboard alloc]
+        initWithBindableArtboard:bindableArtboard];
+}
+
+- (RiveBindableArtboard*)defaultBindableArtboard:
+    (NSError* __autoreleasing _Nullable*)error
+{
+    auto bindableArtboard = riveFile->bindableArtboardDefault();
+    if (bindableArtboard == nullptr)
+    {
+        NSString* message = @"No Default Bindable Artboard Found.";
+        [RiveLogger logFile:nil error:message];
+        *error = [NSError errorWithDomain:RiveErrorDomain
+                                     code:RiveNoArtboardFound
+                                 userInfo:@{
+                                     NSLocalizedDescriptionKey : message,
+                                     @"name" : @"NoArtboardFound"
+                                 }];
+        return nil;
+    }
+    return [[RiveBindableArtboard alloc]
+        initWithBindableArtboard:bindableArtboard];
+}
+
 /// Clean up rive file
 - (void)dealloc
 {
-    riveFile.reset(nullptr);
-    delete fileAssetLoader;
+    riveFile = nullptr;
+    fileAssetLoader = nullptr;
 }
 
 @end

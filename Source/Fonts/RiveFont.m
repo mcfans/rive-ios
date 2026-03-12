@@ -7,7 +7,8 @@
 //
 
 #import "RiveFont.h"
-#import "RiveFallbackFontCache.h"
+#import <rive/text/font_hb.hpp>
+#import <rive/text/utf.hpp>
 #import <RiveRuntime/RiveRuntime-Swift.h>
 #import <CoreText/CoreText.h>
 
@@ -99,10 +100,6 @@ static RiveFontStyleWeight RiveFontStyleWeightFromFloat(float value)
 }
 @end
 
-/// A cache of all used (Rive) fonts, keyed by style and character.
-static NSMutableDictionary<RiveFallbackFontCacheKey*,
-                           RiveFallbackFontCacheValue*>* _fallbackFontCache =
-    nil;
 /// A user-specified array of  fallback fonts.
 static NSArray<id<RiveFallbackFontProvider>>* _fallbackFonts = nil;
 /// A user-specified block that returns usable font providers.
@@ -111,6 +108,7 @@ static RiveFallbackFontsCallback _fallbackFontsCallback = nil;
 static rive::rcp<rive::Font> riveFontFromNativeFont(id font,
                                                     bool useSystemShaper)
 {
+#ifdef WITH_RIVE_TEXT
     uint16_t weight = 400;
     if ([font conformsToProtocol:@protocol(RiveWeightProvider)])
     {
@@ -125,8 +123,12 @@ static rive::rcp<rive::Font> riveFontFromNativeFont(id font,
 
     CTFontRef ctFont = (__bridge CTFontRef)font;
     return HBFont::FromSystem((void*)ctFont, useSystemShaper, weight, width);
+#else
+    return nullptr;
+#endif
 }
 
+#ifdef WITH_RIVE_TEXT
 static rive::rcp<rive::Font> findFallbackFont(const rive::Unichar missing,
                                               const uint32_t fallbackIndex,
                                               const rive::Font* font)
@@ -139,27 +141,6 @@ static rive::rcp<rive::Font> findFallbackFont(const rive::Unichar missing,
     float value = hbFont->getWeight();
     RiveFontStyle* style = [[RiveFontStyle alloc] initWithRawWeight:value];
 
-    // Using the above style, check the cache keyed by the given style and
-    // missing character.
-    RiveFallbackFontCacheKey* cache =
-        [[RiveFallbackFontCacheKey alloc] initWithStyle:style
-                                              character:missing
-                                                  index:fallbackIndex];
-
-    // If there is a cached fallback font, use that.
-    RiveFallbackFontCacheValue* cachedValue = _fallbackFontCache[cache];
-    if (cachedValue != nil)
-    {
-        auto font = riveFontFromNativeFont(cachedValue.font,
-                                           cachedValue.usesSystemShaper);
-        rive::rcp<rive::Font> rcFont = rive::rcp<rive::Font>(font);
-        // because the font was released at load time, we need to give
-        // it an extra ref whenever we bump it to a reference counted
-        // pointer.
-        rcFont->ref();
-        return rcFont;
-    }
-
     // Otherwise, request possible fallback providers based on the missing
     // character and style. fallbackFontsCallback will always be non-nil,
     // and use a default array if no explicit callback has been set.
@@ -171,24 +152,47 @@ static rive::rcp<rive::Font> findFallbackFont(const rive::Unichar missing,
         id<RiveFallbackFontProvider> provider =
             providers[fallbackIndex % providers.count];
         id fallbackFont = provider.fallbackFont;
+
+        if (provider.allowsSuggestedFonts)
+        {
+            uint16_t utf16[2];
+            int utf16Count = rive::UTF::ToUTF16(missing, utf16);
+            CFStringRef string = CFStringCreateWithCharacters(
+                kCFAllocatorDefault, utf16, utf16Count);
+
+            if (string)
+            {
+                CTFontRef baseCTFont = (__bridge CTFontRef)fallbackFont;
+
+                // Get Core Text's suggestion for a fallback font
+                CTFontRef ctSuggestedFont = CTFontCreateForString(
+                    baseCTFont,
+                    string,
+                    CFRangeMake(0, CFStringGetLength(string)));
+                if (ctSuggestedFont)
+                {
+                    // Convert CTFontRef to the native font (UIFont / NSFont)
+                    // (they are toll-free bridged) Use __bridge_transfer to
+                    // transfer ownership to ARC
+                    id suggestedFont = (__bridge_transfer id)ctSuggestedFont;
+                    if (suggestedFont)
+                    {
+                        fallbackFont = suggestedFont;
+                    }
+                }
+            }
+
+            CFRelease(string);
+        }
+
         BOOL usesSystemShaper = fallbackIndex >= providers.count;
-        auto font = riveFontFromNativeFont(fallbackFont, usesSystemShaper);
-        rive::rcp<rive::Font> rcFont = rive::rcp<rive::Font>(font);
-        // because the font was released at load time, we need to give
-        // it an extra ref whenever we bump it to a reference counted
-        // pointer.
-        rcFont->ref();
-
-        // Once we've used a font, cache it for later use.
-        _fallbackFontCache[cache] =
-            [[RiveFallbackFontCacheValue alloc] initWithFont:fallbackFont
-                                            usesSystemShaper:usesSystemShaper];
-
-        return rcFont;
+        auto riveFont = riveFontFromNativeFont(fallbackFont, usesSystemShaper);
+        return rive::rcp<rive::Font>(riveFont);
     }
 
     return nullptr;
 }
+#endif
 
 @implementation RiveFont
 {
@@ -198,8 +202,9 @@ static rive::rcp<rive::Font> findFallbackFont(const rive::Unichar missing,
 
 + (void)load
 {
+#ifdef WITH_RIVE_TEXT
     rive::Font::gFallbackProc = findFallbackFont;
-    _fallbackFontCache = [NSMutableDictionary dictionary];
+#endif
 }
 
 - (instancetype)initWithFont:(rive::rcp<rive::Font>)font
@@ -221,40 +226,48 @@ static rive::rcp<rive::Font> findFallbackFont(const rive::Unichar missing,
 
 + (NSArray<id<RiveFallbackFontProvider>>*)fallbackFonts
 {
+#ifdef WITH_RIVE_TEXT
     if (_fallbackFonts.count == 0)
     {
         return @[ [[RiveFallbackFontDescriptor alloc]
-            initWithDesign:RiveFallbackFontDescriptorDesignDefault
-                    weight:RiveFallbackFontDescriptorWeightRegular
-                     width:RiveFallbackFontDescriptorWidthStandard] ];
+                  initWithDesign:RiveFallbackFontDescriptorDesignDefault
+                          weight:RiveFallbackFontDescriptorWeightRegular
+                           width:RiveFallbackFontDescriptorWidthStandard
+            allowsSuggestedFonts:YES] ];
     }
 
     return _fallbackFonts;
+#else
+    return @[];
+#endif
 }
 
 + (void)setFallbackFonts:
     (nonnull NSArray<id<RiveFallbackFontProvider>>*)fallbackFonts
 {
+#ifdef WITH_RIVE_TEXT
     // Set the user-specified fallbacks, and reset the cache.
     _fallbackFonts = [fallbackFonts copy];
-    _fallbackFontCache = [NSMutableDictionary dictionary];
 
     // "Reset" fallback fonts callback so that array can take priority
     _fallbackFontsCallback = nil;
+#endif
 }
 
 + (void)setFallbackFontsCallback:(RiveFallbackFontsCallback)fallbackFontCallback
 {
+#ifdef WITH_RIVE_TEXT
     // Set the user-specified fallback block, and reset the cache.
     _fallbackFontsCallback = [fallbackFontCallback copy];
-    _fallbackFontCache = [NSMutableDictionary dictionary];
 
     // "Reset" fallback fonts array so that callback can take priority
     _fallbackFonts = nil;
+#endif
 }
 
 + (RiveFallbackFontsCallback)fallbackFontsCallback
 {
+#ifdef WITH_RIVE_TEXT
     // If there is no user-specified block set, use our internal defaults.
     if (_fallbackFontsCallback == nil)
     {
@@ -268,6 +281,15 @@ static rive::rcp<rive::Font> findFallbackFont(const rive::Unichar missing,
     }
 
     return _fallbackFontsCallback;
+#else
+    return ^NSArray<id<RiveFallbackFontProvider>>*(RiveFontStyle* style)
+    {
+        // Using this getter will always return a font.
+        // If no user-specified fonts were added, this
+        // returns a default.
+        return [RiveFont fallbackFonts];
+    };
+#endif
 }
 
 @end

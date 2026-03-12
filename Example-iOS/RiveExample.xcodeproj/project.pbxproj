@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -210,8 +210,8 @@
 		049091642BC948AA00F2C12B /* SwiftOutOfBandAudioAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049091622BC948AA00F2C12B /* SwiftOutOfBandAudioAssets.swift */; };
 		04C4C83E2646FE410047E614 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C4C83D2646FE410047E614 /* StateMachine.swift */; };
 		04D5B06C266A460C004ACA5B /* nothing.riv in Resources */ = {isa = PBXBuildFile; fileRef = 04D5B069266A460C004ACA5B /* nothing.riv */; };
-		04DB5937266A348C0020A7E8 /* RiveRuntime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A8F6BD26452E10002C909A /* RiveRuntime.framework */; platformFilters = (ios, xros, ); };
-		04DB5938266A348C0020A7E8 /* RiveRuntime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04A8F6BD26452E10002C909A /* RiveRuntime.framework */; platformFilters = (ios, xros, ); settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		04DB5937266A348C0020A7E8 /* RiveRuntime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A8F6BD26452E10002C909A /* RiveRuntime.framework */; platformFilters = (ios, maccatalyst, xros, ); };
+		04DB5938266A348C0020A7E8 /* RiveRuntime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04A8F6BD26452E10002C909A /* RiveRuntime.framework */; platformFilters = (ios, maccatalyst, xros, ); settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		04E51C362A151A1E0075E473 /* Example__macOS_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E51C352A151A1E0075E473 /* Example__macOS_App.swift */; };
 		04E51C382A151A1E0075E473 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E51C372A151A1E0075E473 /* ContentView.swift */; };
 		04E51C3A2A151A1F0075E473 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04E51C392A151A1F0075E473 /* Assets.xcassets */; };
@@ -325,10 +325,30 @@
 		F22138832CCBEDD500A25BA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F22138822CCBEDD500A25BA7 /* Assets.xcassets */; };
 		F22138862CCBEDD500A25BA7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F22138852CCBEDD500A25BA7 /* Preview Assets.xcassets */; };
 		F221388B2CCBEDE100A25BA7 /* marty.riv in Resources */ = {isa = PBXBuildFile; fileRef = 83C89ACE2988709400044C17 /* marty.riv */; };
+		F22CF1AA2D36BFFF00D35779 /* data_binding_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = F22CF1A92D36BFFF00D35779 /* data_binding_test.riv */; };
+		F22CF1AB2D380E1200D35779 /* data_binding_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = F22CF1A92D36BFFF00D35779 /* data_binding_test.riv */; };
+		F22CF1AC2D380E1300D35779 /* data_binding_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = F22CF1A92D36BFFF00D35779 /* data_binding_test.riv */; };
+		F22CF1AD2D380E1400D35779 /* data_binding_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = F22CF1A92D36BFFF00D35779 /* data_binding_test.riv */; };
+		F22CF1AE2D380E1500D35779 /* data_binding_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = F22CF1A92D36BFFF00D35779 /* data_binding_test.riv */; };
+		F22CF1AF2D380E1600D35779 /* data_binding_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = F22CF1A92D36BFFF00D35779 /* data_binding_test.riv */; };
+		F23A50602DE60E4600366506 /* DataBindingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F259E5822D35B7FA00B78FEF /* DataBindingView.swift */; };
+		F259E5832D35B7FA00B78FEF /* DataBindingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F259E5822D35B7FA00B78FEF /* DataBindingView.swift */; };
 		F26E20AC2CF0E21000130111 /* streaming.riv in Resources */ = {isa = PBXBuildFile; fileRef = F26E20A92CF0E21000130111 /* streaming.riv */; };
+		F2777A8C2F158F40001FE3F1 /* quick_start.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2777A8B2F158F40001FE3F1 /* quick_start.riv */; };
+		F2777A8D2F158F40001FE3F1 /* quick_start.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2777A8B2F158F40001FE3F1 /* quick_start.riv */; };
+		F2777A8E2F158F40001FE3F1 /* quick_start.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2777A8B2F158F40001FE3F1 /* quick_start.riv */; };
+		F2777A8F2F158F40001FE3F1 /* quick_start.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2777A8B2F158F40001FE3F1 /* quick_start.riv */; };
 		F2AB95D12CF0EB800055376E /* streaming.riv in Resources */ = {isa = PBXBuildFile; fileRef = F26E20A92CF0E21000130111 /* streaming.riv */; };
 		F2AC7F3C2CCBEEDC00E3ED79 /* RiveRuntime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A8F6BD26452E10002C909A /* RiveRuntime.framework */; };
 		F2AC7F3D2CCBEEDC00E3ED79 /* RiveRuntime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04A8F6BD26452E10002C909A /* RiveRuntime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F2C2915D2DB6D571009A2918 /* rewards.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2C2915C2DB6D571009A2918 /* rewards.riv */; };
+		F2C2915E2DB6D571009A2918 /* rewards.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2C2915C2DB6D571009A2918 /* rewards.riv */; };
+		F2C2915F2DB6D571009A2918 /* rewards.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2C2915C2DB6D571009A2918 /* rewards.riv */; };
+		F2C291602DB6D571009A2918 /* rewards.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2C2915C2DB6D571009A2918 /* rewards.riv */; };
+		F2C291612DB6D571009A2918 /* rewards.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2C2915C2DB6D571009A2918 /* rewards.riv */; };
+		F2C291622DB6D571009A2918 /* rewards.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2C2915C2DB6D571009A2918 /* rewards.riv */; };
+		F2C291662DB6D599009A2918 /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C291652DB6D599009A2918 /* RewardsView.swift */; };
+		F2C291672DB6D599009A2918 /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C291652DB6D599009A2918 /* RewardsView.swift */; };
 		F2C623362C874E3A0006E0CA /* fallback_fonts.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2C623352C874E3A0006E0CA /* fallback_fonts.riv */; };
 		F2C623372C874E3A0006E0CA /* fallback_fonts.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2C623352C874E3A0006E0CA /* fallback_fonts.riv */; };
 		F2C623392C874E690006E0CA /* SwiftFallbackFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C623382C874E690006E0CA /* SwiftFallbackFonts.swift */; };
@@ -340,6 +360,18 @@
 		F2C852EB2CD17B8200F0D81F /* RiveRuntime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A8F6BD26452E10002C909A /* RiveRuntime.framework */; };
 		F2C852EC2CD17B8200F0D81F /* RiveRuntime.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04A8F6BD26452E10002C909A /* RiveRuntime.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F2C852F22CD19F6A00F0D81F /* marty.riv in Resources */ = {isa = PBXBuildFile; fileRef = 83C89ACE2988709400044C17 /* marty.riv */; };
+		F2E2F2762F1176CD000F3E20 /* blinko.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2E2F2752F1176CD000F3E20 /* blinko.riv */; };
+		F2E2F2772F1176CD000F3E20 /* blinko.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2E2F2752F1176CD000F3E20 /* blinko.riv */; };
+		F2E2F2782F1176CD000F3E20 /* blinko.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2E2F2752F1176CD000F3E20 /* blinko.riv */; };
+		F2E2F2792F1176CD000F3E20 /* blinko.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2E2F2752F1176CD000F3E20 /* blinko.riv */; };
+		F2E2F2852F118819000F3E20 /* BlinkoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2F2842F118819000F3E20 /* BlinkoView.swift */; };
+		F2E2F2862F118819000F3E20 /* BlinkoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2F2842F118819000F3E20 /* BlinkoView.swift */; };
+		F2E2F2892F1188AC000F3E20 /* ExamplesMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3357CA0280F42EC00F03B6F /* ExamplesMaster.swift */; };
+		F2E2F28A2F1188AC000F3E20 /* ExamplesMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3357CA0280F42EC00F03B6F /* ExamplesMaster.swift */; };
+		F2F067172EF5C44E00FC884C /* marty_v2.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2F067162EF5C44E00FC884C /* marty_v2.riv */; };
+		F2F067182EF5C44E00FC884C /* marty_v2.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2F067162EF5C44E00FC884C /* marty_v2.riv */; };
+		F2F067192EF5C44E00FC884C /* marty_v2.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2F067162EF5C44E00FC884C /* marty_v2.riv */; };
+		F2F0671A2EF5C44E00FC884C /* marty_v2.riv in Resources */ = {isa = PBXBuildFile; fileRef = F2F067162EF5C44E00FC884C /* marty_v2.riv */; };
 		F8772AF02AD94A4400AB5920 /* marty.riv in Resources */ = {isa = PBXBuildFile; fileRef = 83C89ACE2988709400044C17 /* marty.riv */; };
 		F8772AF12AD94A4400AB5920 /* paper.riv in Resources */ = {isa = PBXBuildFile; fileRef = 83C89AD0298870A700044C17 /* paper.riv */; };
 		F8772AF22AD94A4400AB5920 /* Bear.riv in Resources */ = {isa = PBXBuildFile; fileRef = 83DE4CB42AB3974300B88B72 /* Bear.riv */; };
@@ -525,8 +557,13 @@
 		F22138822CCBEDD500A25BA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F22138852CCBEDD500A25BA7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F22138872CCBEDD500A25BA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F22CF1A92D36BFFF00D35779 /* data_binding_test.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = data_binding_test.riv; sourceTree = "<group>"; };
+		F259E5822D35B7FA00B78FEF /* DataBindingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBindingView.swift; sourceTree = "<group>"; };
 		F26E20A92CF0E21000130111 /* streaming.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = streaming.riv; sourceTree = "<group>"; };
+		F2777A8B2F158F40001FE3F1 /* quick_start.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = quick_start.riv; sourceTree = "<group>"; };
 		F2B7F2F72C5AC09200F47FBC /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
+		F2C2915C2DB6D571009A2918 /* rewards.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = rewards.riv; sourceTree = "<group>"; };
+		F2C291652DB6D599009A2918 /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
 		F2C623352C874E3A0006E0CA /* fallback_fonts.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = fallback_fonts.riv; sourceTree = "<group>"; };
 		F2C623382C874E690006E0CA /* SwiftFallbackFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftFallbackFonts.swift; sourceTree = "<group>"; };
 		F2C852D12CD1772300F0D81F /* Example (tvOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example (tvOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -534,8 +571,15 @@
 		F2C852D52CD1772300F0D81F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F2C852D72CD1772400F0D81F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F2C852DA2CD1772400F0D81F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F2E2F2752F1176CD000F3E20 /* blinko.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = blinko.riv; sourceTree = "<group>"; };
+		F2E2F2842F118819000F3E20 /* BlinkoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkoView.swift; sourceTree = "<group>"; };
+		F2F067162EF5C44E00FC884C /* marty_v2.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = marty_v2.riv; sourceTree = "<group>"; };
 		F8DA7B442AF523A800FF3CBF /* DismissableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F23255D52EF5C09C0096E26F /* Experimental */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Experimental; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		040553892B7A274B008F076A /* Frameworks */ = {
@@ -646,6 +690,7 @@
 		C3ECAC322818608B00A81123 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				F23255D52EF5C09C0096E26F /* Experimental */,
 				C3ECAC33281860E900A81123 /* ViewModel */,
 				042C88862643DB2200E7DBB2 /* Storyboard */,
 				C9A84F342644931E0014D8E0 /* SwiftUI */,
@@ -667,6 +712,8 @@
 		C9696B0E24FC6FD10041502A /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				F2C2915C2DB6D571009A2918 /* rewards.riv */,
+				F22CF1A92D36BFFF00D35779 /* data_binding_test.riv */,
 				F26E20A92CF0E21000130111 /* streaming.riv */,
 				2E974F942CB3509200642588 /* layout_test.riv */,
 				F2C623352C874E3A0006E0CA /* fallback_fonts.riv */,
@@ -729,6 +776,9 @@
 				C3D187F8280770EA008B739A /* truck.riv */,
 				C9BD3925263B5FC700696C37 /* truck_v7.riv */,
 				046AFA6E2673AF04004ED497 /* blendmodes.riv */,
+				F2E2F2752F1176CD000F3E20 /* blinko.riv */,
+				F2F067162EF5C44E00FC884C /* marty_v2.riv */,
+				F2777A8B2F158F40001FE3F1 /* quick_start.riv */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -752,6 +802,9 @@
 				0490914B2BC8326E00F2C12B /* SwiftAudioAssets.swift */,
 				049091622BC948AA00F2C12B /* SwiftOutOfBandAudioAssets.swift */,
 				F2C623382C874E690006E0CA /* SwiftFallbackFonts.swift */,
+				F259E5822D35B7FA00B78FEF /* DataBindingView.swift */,
+				F2C291652DB6D599009A2918 /* RewardsView.swift */,
+				F2E2F2842F118819000F3E20 /* BlinkoView.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -898,6 +951,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				F23255D52EF5C09C0096E26F /* Experimental */,
+			);
 			name = "Preview (iOS)";
 			packageProductDependencies = (
 				040554322B7A291A008F076A /* RiveRuntime */,
@@ -936,6 +992,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F23255D52EF5C09C0096E26F /* Experimental */,
 			);
 			name = "Example (iOS)";
 			productName = RiveExample;
@@ -1063,10 +1122,13 @@
 				0405538E2B7A274B008F076A /* teststatemachine.riv in Resources */,
 				0405538F2B7A274B008F076A /* bullet_man_game.riv in Resources */,
 				040553902B7A274B008F076A /* hero_editor.riv in Resources */,
+				F2F067172EF5C44E00FC884C /* marty_v2.riv in Resources */,
 				040553912B7A274B008F076A /* watch_v1.riv in Resources */,
 				040553922B7A274B008F076A /* leg_day_events_example.riv in Resources */,
+				F22CF1AC2D380E1300D35779 /* data_binding_test.riv in Resources */,
 				040553932B7A274B008F076A /* play_button_event_example.riv in Resources */,
 				040553942B7A274B008F076A /* switch_event_example.riv in Resources */,
+				F2C2915E2DB6D571009A2918 /* rewards.riv in Resources */,
 				040553952B7A274B008F076A /* magic_8-ball_v2.riv in Resources */,
 				040553962B7A274B008F076A /* simple_assets.riv in Resources */,
 				040553972B7A274B008F076A /* light_switch.riv in Resources */,
@@ -1074,6 +1136,7 @@
 				040553992B7A274B008F076A /* asset_load_check.riv in Resources */,
 				0405539A2B7A274B008F076A /* rbutton.riv in Resources */,
 				0405539B2B7A274B008F076A /* constrained.riv in Resources */,
+				F2E2F2762F1176CD000F3E20 /* blinko.riv in Resources */,
 				0405539C2B7A274B008F076A /* nothing.riv in Resources */,
 				0405539D2B7A274B008F076A /* artboard_animations.riv in Resources */,
 				0405539E2B7A274B008F076A /* testtext.riv in Resources */,
@@ -1087,6 +1150,7 @@
 				040553A62B7A274B008F076A /* life_bar.riv in Resources */,
 				040553A72B7A274B008F076A /* rating_animation.riv in Resources */,
 				040553A82B7A274B008F076A /* prop_example.riv in Resources */,
+				F2777A8F2F158F40001FE3F1 /* quick_start.riv in Resources */,
 				040553A92B7A274B008F076A /* two_bone_ik.riv in Resources */,
 				040553AA2B7A274B008F076A /* energy_bar_example.riv in Resources */,
 				2E974F962CB3509200642588 /* layout_test.riv in Resources */,
@@ -1142,7 +1206,9 @@
 				040554022B7A2858008F076A /* Inter-45562.ttf in Resources */,
 				040554032B7A2858008F076A /* off_road_car_blog.riv in Resources */,
 				040554042B7A2858008F076A /* Main.storyboard in Resources */,
+				F2C2915D2DB6D571009A2918 /* rewards.riv in Resources */,
 				040554052B7A2858008F076A /* skills.riv in Resources */,
+				F22CF1AB2D380E1200D35779 /* data_binding_test.riv in Resources */,
 				040554062B7A2858008F076A /* artboard_animations.riv in Resources */,
 				040554072B7A2858008F076A /* trailblaze.riv in Resources */,
 				049091582BC832B000F2C12B /* ping_pong_audio_demo.riv in Resources */,
@@ -1162,6 +1228,8 @@
 				040554142B7A2858008F076A /* testanimation.riv in Resources */,
 				040554152B7A2858008F076A /* truck.riv in Resources */,
 				040554162B7A2858008F076A /* simple_assets.riv in Resources */,
+				F2E2F2782F1176CD000F3E20 /* blinko.riv in Resources */,
+				F2F0671A2EF5C44E00FC884C /* marty_v2.riv in Resources */,
 				040554172B7A2858008F076A /* Preview Assets.xcassets in Resources */,
 				040554182B7A2858008F076A /* bullet_man_game.riv in Resources */,
 				040554192B7A2858008F076A /* ui_swipe_left_to_delete.riv in Resources */,
@@ -1181,6 +1249,7 @@
 				040554262B7A2858008F076A /* asset_load_check.riv in Resources */,
 				0490915A2BC832B000F2C12B /* table-59328.wav in Resources */,
 				040554272B7A2858008F076A /* energy_bar_example.riv in Resources */,
+				F2777A8E2F158F40001FE3F1 /* quick_start.riv in Resources */,
 				040554282B7A2858008F076A /* clipping.riv in Resources */,
 				040554292B7A2858008F076A /* watch_v1.riv in Resources */,
 				0405542A2B7A2858008F076A /* prop_example.riv in Resources */,
@@ -1196,10 +1265,13 @@
 				04E51C472A151C230075E473 /* teststatemachine.riv in Resources */,
 				04E51C482A151C230075E473 /* bullet_man_game.riv in Resources */,
 				04E51C492A151C230075E473 /* hero_editor.riv in Resources */,
+				F2F067192EF5C44E00FC884C /* marty_v2.riv in Resources */,
 				04E51C4A2A151C230075E473 /* watch_v1.riv in Resources */,
 				04E51C4B2A151C230075E473 /* leg_day_events_example.riv in Resources */,
+				F22CF1AD2D380E1400D35779 /* data_binding_test.riv in Resources */,
 				04E51C4C2A151C230075E473 /* play_button_event_example.riv in Resources */,
 				04E51C4D2A151C230075E473 /* switch_event_example.riv in Resources */,
+				F2C291602DB6D571009A2918 /* rewards.riv in Resources */,
 				04E51C4E2A151C230075E473 /* magic_8-ball_v2.riv in Resources */,
 				043026072B012C5000320F2E /* simple_assets.riv in Resources */,
 				04E51C4F2A151C230075E473 /* light_switch.riv in Resources */,
@@ -1207,6 +1279,7 @@
 				E5B5C2192B238829006E57C8 /* asset_load_check.riv in Resources */,
 				04E51C512A151C230075E473 /* rbutton.riv in Resources */,
 				04E51C522A151C230075E473 /* constrained.riv in Resources */,
+				F2E2F2792F1176CD000F3E20 /* blinko.riv in Resources */,
 				04E51C532A151C230075E473 /* nothing.riv in Resources */,
 				04E51C542A151C230075E473 /* artboard_animations.riv in Resources */,
 				E57798AC2A731C5800FF25C3 /* testtext.riv in Resources */,
@@ -1220,6 +1293,7 @@
 				04E51C5C2A151C230075E473 /* life_bar.riv in Resources */,
 				E5964AB22A9CDB2100140479 /* rating_animation.riv in Resources */,
 				04E51C5D2A151C230075E473 /* prop_example.riv in Resources */,
+				F2777A8D2F158F40001FE3F1 /* quick_start.riv in Resources */,
 				04E51C5E2A151C230075E473 /* two_bone_ik.riv in Resources */,
 				04E51C5F2A151C230075E473 /* energy_bar_example.riv in Resources */,
 				2E974F982CB3509200642588 /* layout_test.riv in Resources */,
@@ -1275,6 +1349,7 @@
 				0453FCBF2B014E2F001185C8 /* Inter-45562.ttf in Resources */,
 				042C88E92644447500E7DBB2 /* off_road_car_blog.riv in Resources */,
 				042C88832643D6B900E7DBB2 /* Main.storyboard in Resources */,
+				F2C2915F2DB6D571009A2918 /* rewards.riv in Resources */,
 				042C88EA2644447500E7DBB2 /* skills.riv in Resources */,
 				042C88E62644447500E7DBB2 /* artboard_animations.riv in Resources */,
 				042C88E72644447500E7DBB2 /* trailblaze.riv in Resources */,
@@ -1296,6 +1371,8 @@
 				C3D187F9280770EA008B739A /* truck.riv in Resources */,
 				043026062B012C5000320F2E /* simple_assets.riv in Resources */,
 				C9C73EA124FC471E00EF9516 /* Preview Assets.xcassets in Resources */,
+				F2E2F2772F1176CD000F3E20 /* blinko.riv in Resources */,
+				F2F067182EF5C44E00FC884C /* marty_v2.riv in Resources */,
 				C3E2B58A2833ECB500A8651B /* bullet_man_game.riv in Resources */,
 				042C88DD2644447500E7DBB2 /* ui_swipe_left_to_delete.riv in Resources */,
 				042C88E52644447500E7DBB2 /* explorer.riv in Resources */,
@@ -1303,6 +1380,7 @@
 				046AFA712673AF04004ED497 /* blendmodes.riv in Resources */,
 				042C88EC2644447500E7DBB2 /* vader.riv in Resources */,
 				E5964AB12A9CDB2100140479 /* rating_animation.riv in Resources */,
+				F22CF1AA2D36BFFF00D35779 /* data_binding_test.riv in Resources */,
 				0453FCB42B012D17001185C8 /* picture-47982.jpeg in Resources */,
 				83C89AD1298870A700044C17 /* paper.riv in Resources */,
 				C9C73E9E24FC471E00EF9516 /* Assets.xcassets in Resources */,
@@ -1314,6 +1392,7 @@
 				E5B5C2182B238829006E57C8 /* asset_load_check.riv in Resources */,
 				0490915B2BC832B000F2C12B /* table-59328.wav in Resources */,
 				E5A7874A27E115170056F24B /* energy_bar_example.riv in Resources */,
+				F2777A8C2F158F40001FE3F1 /* quick_start.riv in Resources */,
 				042C88EB2644447500E7DBB2 /* clipping.riv in Resources */,
 				C3E383482837E6B00029D65E /* watch_v1.riv in Resources */,
 				E5A7874C27E1158E0056F24B /* prop_example.riv in Resources */,
@@ -1327,6 +1406,8 @@
 				F221388B2CCBEDE100A25BA7 /* marty.riv in Resources */,
 				F22138862CCBEDD500A25BA7 /* Preview Assets.xcassets in Resources */,
 				F26E20AC2CF0E21000130111 /* streaming.riv in Resources */,
+				F22CF1AE2D380E1500D35779 /* data_binding_test.riv in Resources */,
+				F2C291612DB6D571009A2918 /* rewards.riv in Resources */,
 				F22138832CCBEDD500A25BA7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1338,6 +1419,8 @@
 				F2C852F22CD19F6A00F0D81F /* marty.riv in Resources */,
 				F2C852DB2CD1772400F0D81F /* Preview Assets.xcassets in Resources */,
 				F2AB95D12CF0EB800055376E /* streaming.riv in Resources */,
+				F22CF1AF2D380E1600D35779 /* data_binding_test.riv in Resources */,
+				F2C291622DB6D571009A2918 /* rewards.riv in Resources */,
 				F2C852D82CD1772400F0D81F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1353,6 +1436,7 @@
 				040553852B7A274B008F076A /* SwiftEvents.swift in Sources */,
 				040553862B7A274B008F076A /* Example__macOS_App.swift in Sources */,
 				040553882B7A274B008F076A /* DismissableView.swift in Sources */,
+				F2E2F2892F1188AC000F3E20 /* ExamplesMaster.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1382,7 +1466,9 @@
 				040553E42B7A2858008F076A /* SwiftLayout.swift in Sources */,
 				040553E52B7A2858008F076A /* SceneDelegate.swift in Sources */,
 				040553E62B7A2858008F076A /* SwiftEvents.swift in Sources */,
+				F23A50602DE60E4600366506 /* DataBindingView.swift in Sources */,
 				040553E72B7A2858008F076A /* StateMachine.swift in Sources */,
+				F2C291662DB6D599009A2918 /* RewardsView.swift in Sources */,
 				040553E82B7A2858008F076A /* RiveSlider.swift in Sources */,
 				040553E92B7A2858008F076A /* Layout.swift in Sources */,
 				040553EA2B7A2858008F076A /* BlendModes.swift in Sources */,
@@ -1392,6 +1478,7 @@
 				040553ED2B7A2858008F076A /* SwiftSimpleAnimation.swift in Sources */,
 				040553EE2B7A2858008F076A /* SimpleOutOfBand.swift in Sources */,
 				040553EF2B7A2858008F076A /* SwiftTestText.swift in Sources */,
+				F2E2F2862F118819000F3E20 /* BlinkoView.swift in Sources */,
 				040553F02B7A2858008F076A /* SwiftStateMachine.swift in Sources */,
 				040553F12B7A2858008F076A /* DismissableView.swift in Sources */,
 				2E83910A2C050B0F003BCF2A /* SwiftNestedInputs.swift in Sources */,
@@ -1406,6 +1493,7 @@
 				E5964AAC2A9CD49200140479 /* SwiftEvents.swift in Sources */,
 				04E51C362A151A1E0075E473 /* Example__macOS_App.swift in Sources */,
 				F8DA7B462AF523A800FF3CBF /* DismissableView.swift in Sources */,
+				F2E2F28A2F1188AC000F3E20 /* ExamplesMaster.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1417,6 +1505,7 @@
 				C324DB5D280728690060589F /* RiveButton.swift in Sources */,
 				C9C73E9824FC471E00EF9516 /* AppDelegate.swift in Sources */,
 				0490914D2BC8326E00F2C12B /* SwiftAudioAssets.swift in Sources */,
+				F259E5832D35B7FA00B78FEF /* DataBindingView.swift in Sources */,
 				C3E2B58C2833ECFE00A8651B /* SwiftCannonGame.swift in Sources */,
 				C9CB2F13264C92D200E7FF0D /* SwiftWidgets.swift in Sources */,
 				042C888E2644230700E7DBB2 /* utility.swift in Sources */,
@@ -1439,12 +1528,14 @@
 				C324DB5B2807216B0060589F /* RiveSlider.swift in Sources */,
 				042C888C2643EEE300E7DBB2 /* Layout.swift in Sources */,
 				046AFA732673B00B004ED497 /* BlendModes.swift in Sources */,
+				F2C291672DB6D599009A2918 /* RewardsView.swift in Sources */,
 				049091642BC948AA00F2C12B /* SwiftOutOfBandAudioAssets.swift in Sources */,
 				04026DCA27CE3EF6002B3DBF /* SwiftMultipleAnimations.swift in Sources */,
 				042C88882643DB7100E7DBB2 /* SimpleAnimation.swift in Sources */,
 				04026DC427CE3ED6002B3DBF /* SwiftSimpleAnimation.swift in Sources */,
 				0453FCB92B012DA9001185C8 /* SimpleOutOfBand.swift in Sources */,
 				E57798A92A730A9B00FF25C3 /* SwiftTestText.swift in Sources */,
+				F2E2F2852F118819000F3E20 /* BlinkoView.swift in Sources */,
 				04026DCE27CE3F0F002B3DBF /* SwiftStateMachine.swift in Sources */,
 				F8DA7B452AF523A800FF3CBF /* DismissableView.swift in Sources */,
 				2E83910B2C050B0F003BCF2A /* SwiftNestedInputs.swift in Sources */,
@@ -1756,10 +1847,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Source/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Source/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1767,7 +1858,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = rive.app.ios.RiveExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 1.0;
@@ -1780,10 +1871,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Source/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Source/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1791,7 +1882,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = rive.app.ios.RiveExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 1.0;
@@ -1864,6 +1955,466 @@
 				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Release;
+		};
+		F2BD96E02DDCEE7B00E7F49A /* Debug (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Debug (Catalyst)";
+		};
+		F2BD96E12DDCEE7B00E7F49A /* Debug (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_ASSET_PATHS = "\"Source/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Source/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = rive.app.ios.RiveExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug (Catalyst)";
+		};
+		F2BD96E22DDCEE7B00E7F49A /* Debug (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "Example (macOS)/Example__macOS_.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Example (macOS)/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Rive. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "rive.app.Example--macOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = "Debug (Catalyst)";
+		};
+		F2BD96E32DDCEE7B00E7F49A /* Debug (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_ASSET_PATHS = "\"Source/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Source/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = rive.app.ios.RiveExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = "Debug (Catalyst)";
+		};
+		F2BD96E42DDCEE7B00E7F49A /* Debug (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "Example (macOS)/Example__macOS_.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Example (macOS)/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Rive. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "rive.app.Example--macOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = "Debug (Catalyst)";
+		};
+		F2BD96E52DDCEE7B00E7F49A /* Debug (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Example (visionOS)/Preview Content\"";
+				DEVELOPMENT_TEAM = 8N4K3S3FJ4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.rive.Example--visionOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = "Debug (Catalyst)";
+		};
+		F2BD96E62DDCEE7B00E7F49A /* Debug (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Example (tvOS)/Preview Content\"";
+				DEVELOPMENT_TEAM = 8N4K3S3FJ4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "david.app.rive.Example--tvOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 16.0;
+			};
+			name = "Debug (Catalyst)";
+		};
+		F2BD96E72DDCEE8200E7F49A /* Release (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release (Catalyst)";
+		};
+		F2BD96E82DDCEE8200E7F49A /* Release (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_ASSET_PATHS = "\"Source/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Source/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = rive.app.ios.RiveExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Release (Catalyst)";
+		};
+		F2BD96E92DDCEE8200E7F49A /* Release (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "Example (macOS)/Example__macOS_.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Example (macOS)/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Rive. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "rive.app.Example--macOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = "Release (Catalyst)";
+		};
+		F2BD96EA2DDCEE8200E7F49A /* Release (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_ASSET_PATHS = "\"Source/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Source/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = rive.app.ios.RiveExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = "Release (Catalyst)";
+		};
+		F2BD96EB2DDCEE8200E7F49A /* Release (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "Example (macOS)/Example__macOS_.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Example (macOS)/Preview Content\"";
+				DEVELOPMENT_TEAM = NJ3JMFUNS9;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Rive. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "rive.app.Example--macOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = "Release (Catalyst)";
+		};
+		F2BD96EC2DDCEE8200E7F49A /* Release (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Example (visionOS)/Preview Content\"";
+				DEVELOPMENT_TEAM = 8N4K3S3FJ4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.rive.Example--visionOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = "Release (Catalyst)";
+		};
+		F2BD96ED2DDCEE8200E7F49A /* Release (Catalyst) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Example (tvOS)/Preview Content\"";
+				DEVELOPMENT_TEAM = 8N4K3S3FJ4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "david.app.rive.Example--tvOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 16.0;
+			};
+			name = "Release (Catalyst)";
 		};
 		F2C852DD2CD1772400F0D81F /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1939,7 +2490,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				040553C52B7A274B008F076A /* Debug */,
+				F2BD96E22DDCEE7B00E7F49A /* Debug (Catalyst) */,
 				040553C62B7A274B008F076A /* Release */,
+				F2BD96E92DDCEE8200E7F49A /* Release (Catalyst) */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1948,7 +2501,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0405542E2B7A2858008F076A /* Debug */,
+				F2BD96E12DDCEE7B00E7F49A /* Debug (Catalyst) */,
 				0405542F2B7A2858008F076A /* Release */,
+				F2BD96E82DDCEE8200E7F49A /* Release (Catalyst) */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1957,7 +2512,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				04E51C402A151A1F0075E473 /* Debug */,
+				F2BD96E42DDCEE7B00E7F49A /* Debug (Catalyst) */,
 				04E51C412A151A1F0075E473 /* Release */,
+				F2BD96EB2DDCEE8200E7F49A /* Release (Catalyst) */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1966,7 +2523,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C9C73EBC24FC471E00EF9516 /* Debug */,
+				F2BD96E02DDCEE7B00E7F49A /* Debug (Catalyst) */,
 				C9C73EBD24FC471E00EF9516 /* Release */,
+				F2BD96E72DDCEE8200E7F49A /* Release (Catalyst) */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1975,7 +2534,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C9C73EBF24FC471E00EF9516 /* Debug */,
+				F2BD96E32DDCEE7B00E7F49A /* Debug (Catalyst) */,
 				C9C73EC024FC471E00EF9516 /* Release */,
+				F2BD96EA2DDCEE8200E7F49A /* Release (Catalyst) */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1984,7 +2545,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F22138892CCBEDD500A25BA7 /* Debug */,
+				F2BD96E52DDCEE7B00E7F49A /* Debug (Catalyst) */,
 				F221388A2CCBEDD500A25BA7 /* Release */,
+				F2BD96EC2DDCEE8200E7F49A /* Release (Catalyst) */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1993,7 +2556,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F2C852DD2CD1772400F0D81F /* Debug */,
+				F2BD96E62DDCEE7B00E7F49A /* Debug (Catalyst) */,
 				F2C852DE2CD1772400F0D81F /* Release */,
+				F2BD96ED2DDCEE8200E7F49A /* Release (Catalyst) */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

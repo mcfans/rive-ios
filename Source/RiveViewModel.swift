@@ -167,7 +167,7 @@ import Combine
     
     // MARK: - RiveView
     
-    open private(set) var riveModel: RiveModel? {
+    @objc open private(set) var riveModel: RiveModel? {
         didSet {
             if let model = riveModel {
                 try! riveView?.setModel(model, autoPlay: autoPlay)
@@ -175,22 +175,22 @@ import Combine
         }
     }
     
-    open var isPlaying: Bool { riveView?.isPlaying ?? false }
-    
-    open var autoPlay: Bool
-    
-    open var fit: RiveFit = .contain {
+    @objc open var isPlaying: Bool { riveView?.isPlaying ?? false }
+
+    @objc open var autoPlay: Bool
+
+    @objc open var fit: RiveFit = .contain {
         didSet { riveView?.fit = fit }
     }
     
-    open var alignment: RiveAlignment = .center {
+    @objc open var alignment: RiveAlignment = .center {
         didSet { riveView?.alignment = alignment }
     }
     
     /// The scale factor to apply when using the `layout` fit. By default, this value is -1, where Rive will determine
     /// the correct scale for your device.To override this default behavior, set this value to a value greater than 0.
     /// - Note: If the scale factor <= 0, nothing will be drawn.
-    open var layoutScaleFactor: Double = layoutScaleFactorAutomatic {
+    @objc open var layoutScaleFactor: Double = layoutScaleFactorAutomatic {
         didSet { riveView?.layoutScaleFactor = layoutScaleFactor }
     }
     
@@ -199,15 +199,17 @@ import Combine
     /// When false, only the Rive view will handle touch / click events, and will not forward
     /// to any next responder(s). Defaults to `false`, as to preserve pre-existing runtime functionality.
     /// - Note: On iOS, this is handled separately from `isExclusiveTouch`.
-    open var forwardsListenerEvents: Bool = false {
+    @objc open var forwardsListenerEvents: Bool = false {
         didSet { riveView?.forwardsListenerEvents = forwardsListenerEvents }
     }
 
-    #if os(iOS) || os(visionOS) || os(tvOS)
+    #if os(macOS)
     /// Hints to underlying CADisplayLink in RiveView (if created) the preferred FPS to run at
     /// For more, see: https://developer.apple.com/documentation/quartzcore/cadisplaylink/1648421-preferredframespersecond
     /// - Parameters:
     ///   - preferredFramesPerSecond: Integer number of seconds to set preferred FPS at
+    @available(macOS 14, *)
+    @objc(setPreferredFramesPerSecond:)
     public func setPreferredFramesPerSecond(preferredFramesPerSecond: Int) {
         riveView?.setPreferredFramesPerSecond(preferredFramesPerSecond: preferredFramesPerSecond)
     }
@@ -216,8 +218,27 @@ import Combine
     /// For more, see: https://developer.apple.com/documentation/quartzcore/cadisplaylink/3875343-preferredframeraterange
     /// - Parameters:
     ///   - preferredFrameRateRange: Frame rate range to set
-    @available(iOS 15.0, *)
+    @available(macOS 14, *)
     public func setPreferredFrameRateRange(preferredFrameRateRange: CAFrameRateRange) {
+        riveView?.setPreferredFrameRateRange(preferredFrameRateRange: preferredFrameRateRange)
+    }
+    #else
+    /// Hints to underlying CADisplayLink in RiveView (if created) the preferred FPS to run at
+    /// For more, see: https://developer.apple.com/documentation/quartzcore/cadisplaylink/1648421-preferredframespersecond
+    /// - Parameters:
+    ///   - preferredFramesPerSecond: Integer number of seconds to set preferred FPS at
+    @objc(setPreferredFramesPerSecond:)
+    open func setPreferredFramesPerSecond(preferredFramesPerSecond: Int) {
+        riveView?.setPreferredFramesPerSecond(preferredFramesPerSecond: preferredFramesPerSecond)
+    }
+    
+    /// Hints to underlying CADisplayLink in RiveView (if created) the preferred frame rate range
+    /// For more, see: https://developer.apple.com/documentation/quartzcore/cadisplaylink/3875343-preferredframeraterange
+    /// - Parameters:
+    ///   - preferredFrameRateRange: Frame rate range to set
+    @available(iOS 15.0, tvOS 15.0, visionOS 1.0, *)
+    @objc(setPreferredFrameRateRange:)
+    open func setPreferredFrameRateRange(preferredFrameRateRange: CAFrameRateRange) {
         riveView?.setPreferredFrameRateRange(preferredFrameRateRange: preferredFrameRateRange)
     }
     #endif
@@ -404,7 +425,7 @@ import Combine
     /// - Parameters:
     ///   - inputName: The name of a `Trigger` input on the active StateMachine
     ///   - path: A String representing the path to the nested artboard delimited by "/" (ie. "Nested" or "Level1/Level2/Level3")
-    open func triggerInput(_ inputName: String, path: String) {
+    @objc open func triggerInput(_ inputName: String, path: String) {
         RiveLogger.log(viewModel: self, event: .triggerInput(inputName, path))
         riveModel?.artboard?.getTrigger(inputName, path: path).fire()
         play()
@@ -415,6 +436,7 @@ import Combine
     ///   - inputName: The name of a `Boolean` input on the active StateMachine
     ///   - value: A Bool value for the input
     ///   - path: A String representing the path to the nested artboard delimited by "/" (ie. "Nested" or "Level1/Level2/Level3")
+    @objc(setBooleanInput:value:atPath:)
     open func setInput(_ inputName: String, value: Bool, path: String) {
         RiveLogger.log(viewModel: self, event: .booleanInput(inputName, path, value))
         riveModel?.artboard?.getBool(inputName, path: path).setValue(value)
@@ -426,6 +448,7 @@ import Combine
     ///   - inputName: The name of a `Number` input on the active StateMachine
     ///   - value: A Float value for the input
     ///   - path: A String representing the path to the nested artboard delimited by "/" (ie. "Nested" or "Level1/Level2/Level3")
+    @objc(setFloatInput:value:atPath:)
     open func setInput(_ inputName: String, value: Float, path: String) {
         RiveLogger.log(viewModel: self, event: .floatInput(inputName, path, value))
         riveModel?.artboard?.getNumber(inputName, path: path).setValue(value);
@@ -437,19 +460,22 @@ import Combine
     ///   - inputName: The name of a `Number` input on the active StateMachine
     ///   - value: A Double value for the input
     ///   - path: A String representing the path to the nested artboard delimited by "/" (ie. "Nested" or "Level1/Level2/Level3")
+    @objc(setDoubleInput:value:atPath:)
     open func setInput(_ inputName: String, value: Double, path: String) {
         RiveLogger.log(viewModel: self, event: .doubleInput(inputName, path, value))
         setInput(inputName, value: Float(value), path: path)
     }
-    
+
     /// Get a text value from a specified text run
     /// - Parameters:
     ///   - textRunName: The name of a `Text Run` on the active Artboard
     /// - Returns: String text value of the specified text run if applicable
     @objc open func getTextRunValue(_ textRunName: String) -> String? {
+        #if WITH_RIVE_TEXT
         if let textRun = riveModel?.artboard?.textRun(textRunName) {
             return textRun.text()
         }
+        #endif
         return nil
     }
 
@@ -459,9 +485,11 @@ import Combine
     ///   - path: The path to the nested text run.
     /// - Returns: String text value of the specified text run if applicable
     @objc open func getTextRunValue(_ textRunName: String, path: String) -> String? {
+        #if WITH_RIVE_TEXT
         if let textRun = riveModel?.artboard?.textRun(textRunName, path: path) {
             return textRun.text()
         }
+        #endif
         return nil
     }
 
@@ -470,6 +498,7 @@ import Combine
     ///   - textRunName: The name of a `Text Run` on the active Artboard
     ///   - textValue: A String value for the text run
     @objc open func setTextRunValue(_ textRunName: String, textValue: String) throws {
+        #if WITH_RIVE_TEXT
         if let textRun = riveModel?.artboard?.textRun(textRunName) {
             RiveLogger.log(viewModel: self, event: .textRun(textRunName, nil, textValue))
             textRun.setText(textValue)
@@ -482,6 +511,7 @@ import Combine
             RiveLogger.log(viewModel: self, event: .error(errorMessage))
             throw RiveError.textValueRunError(errorMessage)
         }
+        #endif
     }
 
     /// Set a text value for a specified text run
@@ -491,6 +521,7 @@ import Combine
     ///   - textValue: A String value for the text run
     /// - Note: If the specified path is empty, the parent artboard will be used to find the text run.
     @objc open func setTextRunValue(_ textRunName: String, path: String, textValue: String) throws {
+        #if WITH_RIVE_TEXT
         if let textRun = riveModel?.artboard?.textRun(textRunName, path: path) {
             RiveLogger.log(viewModel: self, event: .textRun(textRunName, path, textValue))
             textRun.setText(textValue)
@@ -503,6 +534,7 @@ import Combine
             RiveLogger.log(viewModel: self, event: .error(errorMessage))
             throw RiveError.textValueRunError(errorMessage)
         }
+        #endif
     }
 
     // TODO: Replace this with a more robust structure of the file's contents
@@ -529,6 +561,7 @@ import Combine
         return view
     }
     
+    @objc(setRiveView:)
     open func setRiveView(view:RiveView)
     {
         registerView(view)
@@ -560,7 +593,7 @@ import Combine
     }
     
     /// Stops maintaining a connection to any `RiveView`
-    open func deregisterView() {
+    @objc open func deregisterView() {
         riveView = nil
     }
     
@@ -600,7 +633,11 @@ import Combine
             animationName: defaultModel.animationName
         )
     }
-    
+
+    @objc open func riveFileDidError(_ error: any Error) {
+        
+    }
+
     // MARK: - RivePlayer Delegate
     
     @objc open func player(playedWithModel riveModel: RiveModel?) { }
